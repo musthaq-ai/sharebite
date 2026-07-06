@@ -1,0 +1,494 @@
+/* ==========================================
+   GLOBAL
+========================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+/* ==========================================
+   BODY
+========================================== */
+
+html,
+body{
+
+    height:100%;
+
+}
+
+body{
+
+    background:linear-gradient(135deg,#F5FAF5,#EEF7EE);
+
+    min-height:100vh;
+
+    overflow-x:hidden;
+
+}
+
+/* ==========================================
+   PAGE
+========================================== */
+
+.login-page{
+
+    min-height:100vh;
+
+    display:flex;
+
+    align-items:center;
+
+    padding:20px 40px;
+
+}
+
+/* ==========================================
+   LOGIN CARD
+========================================== */
+
+.login-card{
+
+    width:100%;
+
+    max-width:520px;
+
+    background:#fff;
+
+    border-radius:24px;
+
+    padding:35px;
+
+    box-shadow:0 15px 45px rgba(0,0,0,.08);
+
+}
+
+/* ==========================================
+   BRAND
+========================================== */
+
+.brand{
+
+    text-decoration:none;
+
+    font-size:34px;
+
+    font-weight:700;
+
+}
+.brand-share{
+
+    color:#1B5E20;   /* Dark Green */
+
+}
+
+.brand-bite{
+
+    color:#4CAF50;   /* Light Green */
+
+}
+
+.brand:hover{
+
+    color:#256D28;
+
+}
+
+/* ==========================================
+   TEXT
+========================================== */
+
+.login-card h2{
+
+    font-size:2.3rem;
+
+    font-weight:700;
+
+    color:#222;
+
+    margin-bottom:8px;
+
+}
+
+.login-card p{
+
+    color:#666;
+
+    margin-top:8px;
+
+    margin-bottom:20px;
+
+    line-height:1.5;
+
+}
+
+/* ==========================================
+   INPUTS
+========================================== */
+
+.input-group{
+
+    margin-top:6px;
+
+}
+
+.input-group-text{
+
+    background:#F7F7F7;
+
+    border:none;
+
+    border-radius:14px 0 0 14px;
+
+}
+
+.form-control{
+
+    border:none;
+
+    background:#F7F7F7;
+
+    height:50px;
+
+    box-shadow:none;
+
+}
+
+.form-control:focus{
+
+    background:#fff;
+
+    box-shadow:0 0 0 4px rgba(46,125,50,.12);
+
+}
+
+.btn-light{
+
+    background:#F7F7F7;
+
+}
+
+/* ==========================================
+   LOGIN BUTTON
+========================================== */
+
+.login-btn{
+
+    background:#2E7D32;
+
+    color:#fff;
+
+    height:50px;
+
+    border-radius:14px;
+
+    font-size:17px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.login-btn:hover{
+
+    background:#256D28;
+
+    transform:translateY(-2px);
+
+    color:#fff;
+
+}
+
+/* ==========================================
+   DIVIDER
+========================================== */
+
+.divider{
+
+    text-align:center;
+
+    margin:22px 0;
+
+    position:relative;
+
+    color:#888;
+
+}
+
+.divider::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:40%;
+
+    height:1px;
+
+    background:#ddd;
+
+    left:0;
+
+    top:50%;
+
+}
+
+.divider::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:40%;
+
+    height:1px;
+
+    background:#ddd;
+
+    right:0;
+
+    top:50%;
+
+}
+
+/* ==========================================
+   REGISTER CARDS
+========================================== */
+
+.register-card{
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    text-decoration:none;
+
+    color:#333;
+
+    background:#fff;
+
+    border:2px solid #EAEAEA;
+
+    border-radius:18px;
+
+    padding:18px;
+
+    transition:.3s;
+
+    height:120px;
+
+}
+
+.register-card:hover{
+
+    border-color:#2E7D32;
+
+    transform:translateY(-4px);
+
+    box-shadow:0 12px 30px rgba(46,125,50,.15);
+
+    color:#2E7D32;
+
+}
+
+.register-card i{
+
+    font-size:34px;
+
+    margin-bottom:10px;
+
+}
+
+/* ==========================================
+   RIGHT SIDE
+========================================== */
+
+.illustration-side{
+
+    background:linear-gradient(135deg,#F5FAF5,#ECF8ED);
+
+    min-height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:30px;
+
+}
+
+.hero-content{
+
+    width:100%;
+
+    max-width:460px;
+
+    text-align:center;
+
+}
+
+.hero-image{
+
+    width:280px;
+
+    max-width:100%;
+
+    height:auto;
+
+    display:block;
+
+    margin:0 auto 20px;
+
+    animation:float 4s ease-in-out infinite;
+
+}
+
+.illustration-side h2{
+
+    font-size:3rem;
+
+    font-weight:700;
+
+    color:#2E7D32;
+
+    margin-bottom:12px;
+
+}
+
+.illustration-side p{
+
+    font-size:1.05rem;
+
+    color:#666;
+
+    line-height:1.6;
+
+    max-width:420px;
+
+    margin:auto;
+
+}
+
+/* ==========================================
+   FLOAT ANIMATION
+========================================== */
+
+@keyframes float{
+
+    0%{
+
+        transform:translateY(0);
+
+    }
+
+    50%{
+
+        transform:translateY(-10px);
+
+    }
+
+    100%{
+
+        transform:translateY(0);
+
+    }
+
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width:992px){
+
+    .illustration-side{
+
+        display:none !important;
+
+    }
+
+    .login-page{
+
+        padding:15px;
+
+    }
+
+    .login-card{
+
+        max-width:100%;
+
+        padding:28px;
+
+        margin:10px auto;
+
+    }
+
+    .login-card h2{
+
+        font-size:2rem;
+
+    }
+
+}
+/* ==========================================
+   EXTRA SMALL DEVICES
+========================================== */
+/* ==========================================
+   MOBILE LOGIN
+========================================== */
+
+@media (max-width:576px){
+
+    .container-fluid{
+
+        padding:0;
+
+    }
+
+    .login-page{
+
+        padding:12px;
+
+        min-height:100vh;
+
+        justify-content:center;
+
+    }
+
+    .login-card{
+
+        width:100%;
+
+        max-width:100%;
+
+        margin:0;
+
+        padding:24px;
+
+        border-radius:20px;
+
+    }
+
+    .input-group{
+
+        width:100%;
+
+    }
+
+    .register-card{
+
+        width:100%;
+
+    }
+
+}

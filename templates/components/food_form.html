@@ -1,0 +1,608 @@
+<div class="container-fluid">
+
+    <!-- ================= HEADER ================= -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+
+                {% if donation %}
+
+                <i class="bi bi-pencil-square text-warning"></i>
+
+                Edit Food Donation
+
+                {% else %}
+
+                <i class="bi bi-plus-circle-fill text-success"></i>
+
+                Add Food Donation
+
+                {% endif %}
+
+            </h2>
+
+            <p class="text-muted">
+
+                {% if donation %}
+
+                Update your food donation details.
+
+                {% else %}
+
+                Donate surplus food to help people in need.
+
+                {% endif %}
+
+            </p>
+
+        </div>
+
+        <a href="{{ url_for('donor.my_donations') }}"
+           class="btn btn-outline-success rounded-pill px-4">
+
+            <i class="bi bi-arrow-left"></i>
+
+            Back
+
+        </a>
+
+    </div>
+
+    <!-- ================= FORM ================= -->
+
+    <form method="POST"
+          enctype="multipart/form-data">
+
+        <div class="row g-4">
+
+            <!-- ================= LEFT ================= -->
+
+            <div class="col-lg-7">
+
+                <div class="card shadow border-0 rounded-4">
+
+                    <div class="card-body p-4">
+
+                        <h4 class="fw-bold mb-4">
+
+                            <i class="bi bi-box2-heart text-success"></i>
+
+                            Food Items
+
+                        </h4>
+
+                        <div id="foodItemsContainer">
+
+                            <!-- FOOD ITEM -->
+
+                            <div class="food-item card border rounded-4 p-4 mb-4">
+
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+
+                                    <h5 class="mb-0">
+
+                                        <i class="bi bi-basket-fill text-success"></i>
+
+                                        Food Item
+                                        <span class="item-number">1</span>
+
+                                    </h5>
+
+                                </div>
+
+                                <!-- Food Name -->
+
+                                <div class="mb-3">
+
+                                    <label class="form-label fw-semibold">
+
+                                        Food Name
+
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        name="food_name[]"
+                                        placeholder="Example : Veg Biryani"
+                                        value="{{ donation.food_name if donation else '' }}"
+                                        required>
+
+                                </div>
+
+                                <!-- Quantity -->
+
+                                <div class="mb-3">
+
+                                    <label class="form-label fw-semibold">
+
+                                        Quantity
+
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        name="quantity[]"
+                                        placeholder="Example : 25 Meals"
+                                        value="{{ donation.quantity if donation else '' }}"
+                                        required>
+
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-md-6">
+
+                                        <div class="mb-3">
+
+                                            <label class="form-label fw-semibold">
+
+                                                Category
+
+                                            </label>
+
+                                            {% set category = donation.category if donation else '' %}
+
+                                            <select
+                                                class="form-select"
+                                                name="category[]">
+
+                                                <option value="Rice">Rice</option>
+
+                                                <option value="Snacks">Snacks</option>
+
+                                                <option value="Dessert">Dessert</option>
+
+                                                <option value="Beverages">Beverages</option>
+
+                                                <option value="Vegetables">Vegetables</option>
+
+                                                <option value="Fruits">Fruits</option>
+
+                                                <option value="Others">Others</option>
+
+                                            </select>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-6">
+
+                                        <div class="mb-3">
+
+                                            <label class="form-label fw-semibold">
+
+                                                Food Type
+
+                                            </label>
+
+                                            {% set foodtype = donation.veg_nonveg if donation else '' %}
+
+                                            <select
+                                                class="form-select"
+                                                name="veg_nonveg[]">
+
+                                                <option value="Veg">Veg</option>
+
+                                                <option value="Non-Veg">Non-Veg</option>
+
+                                            </select>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <!-- Description -->
+
+                                <div class="mb-3">
+
+                                    <label class="form-label fw-semibold">
+
+                                        Description
+
+                                    </label>
+
+                                    <textarea
+                                        class="form-control"
+                                        rows="4"
+                                        name="description[]"
+                                        placeholder="Describe the food...">{{ donation.description if donation else '' }}</textarea>
+
+                                </div>
+
+                            </div>
+
+                            <!-- END FOOD ITEM -->
+
+                        </div>
+                        <!-- ================= ADD FOOD BUTTON ================= -->
+
+                        <div class="text-center mb-4">
+
+                            <button
+                                type="button"
+                                id="addFoodItem"
+                                class="btn btn-outline-success rounded-pill px-4">
+
+                                <i class="bi bi-plus-circle"></i>
+
+                                Add Another Food
+
+                            </button>
+
+                        </div>
+
+                        <hr class="my-4">
+
+                        <!-- ================= DONATION DETAILS ================= -->
+
+                        <h4 class="fw-bold mb-4">
+
+                            <i class="bi bi-clock-history text-primary"></i>
+
+                            Donation Details
+
+                        </h4>
+
+                        <div class="row">
+
+                            <div class="col-md-6">
+
+                                <div class="mb-3">
+
+                                    <label class="form-label fw-semibold">
+
+                                        Prepared Time
+
+                                    </label>
+
+                                    <input
+                                        type="datetime-local"
+                                        class="form-control"
+                                        name="prepared_time"
+                                        value="{{ donation.prepared_time.strftime('%Y-%m-%dT%H:%M') if donation and donation.prepared_time else '' }}">
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <div class="mb-3">
+
+                                    <label class="form-label fw-semibold">
+
+                                        Expiry Time
+
+                                    </label>
+
+                                    <input
+                                        type="datetime-local"
+                                        class="form-control"
+                                        name="expiry_time"
+                                        value="{{ donation.expiry_time.strftime('%Y-%m-%dT%H:%M') if donation and donation.expiry_time else '' }}">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Pickup Address
+
+                            </label>
+
+                            <textarea
+                                class="form-control"
+                                rows="4"
+                                name="pickup_address"
+                                placeholder="Enter complete pickup address">{{ donation.pickup_address if donation else '' }}</textarea>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ================= RIGHT COLUMN START ================= -->
+
+            <div class="col-lg-5">
+                <!-- ================= FOOD IMAGE ================= -->
+
+<div class="card shadow border-0 rounded-4 mb-4">
+
+    <div class="card-body">
+
+        <h4 class="fw-bold mb-3">
+
+            <i class="bi bi-image-fill text-primary"></i>
+
+            Food Image
+
+        </h4>
+
+        <!-- Preview -->
+
+        <img
+            id="previewImage"
+            src="{% if donation and donation.image %}{{ url_for('static', filename='uploads/food/' ~ donation.image) }}{% else %}https://placehold.co/700x450?text=Food+Image{% endif %}"
+            class="img-fluid rounded-4 shadow-sm mb-3"
+            style="width:100%;height:260px;object-fit:cover;">
+
+        <!-- Upload -->
+
+        <input
+            type="file"
+            class="form-control mb-3"
+            id="imageInput"
+            name="image"
+            accept="image/*">
+
+        {% if donation %}
+
+        <small class="text-muted d-block mb-3">
+
+            Leave empty to keep the existing image.
+
+        </small>
+
+        {% endif %}
+
+        <div class="text-center mb-3">
+
+            <span class="badge bg-secondary">
+
+                OR
+
+            </span>
+
+        </div>
+
+        <!-- Camera -->
+
+        <button
+            type="button"
+            class="btn btn-outline-success w-100"
+            id="openCamera">
+
+            <i class="bi bi-camera-fill"></i>
+
+            Capture Live Photo
+
+        </button>
+
+        <div
+            id="cameraContainer"
+            class="mt-3"
+            style="display:none;">
+
+            <video
+                id="camera"
+                autoplay
+                playsinline
+                class="rounded-4 border"
+                style="width:100%;height:260px;object-fit:cover;">
+            </video>
+
+            <canvas
+                id="canvas"
+                style="display:none;">
+            </canvas>
+
+            <div class="d-grid gap-2 mt-3">
+
+                <button
+                    type="button"
+                    id="captureBtn"
+                    class="btn btn-success">
+
+                    📸 Capture
+
+                </button>
+
+                <button
+                    type="button"
+                    id="retakeBtn"
+                    class="btn btn-warning"
+                    style="display:none;">
+
+                    🔄 Retake
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= LOCATION ================= -->
+
+<button
+    type="button"
+    id="currentLocationBtn"
+    class="btn btn-outline-primary rounded-pill w-100 mb-4">
+
+    <i class="bi bi-crosshair"></i>
+
+    Use My Current Location
+
+</button>
+
+<div class="card shadow border-0 rounded-4">
+
+    <div class="card-body">
+
+        <h4 class="fw-bold mb-3">
+
+            <i class="bi bi-geo-alt-fill text-danger"></i>
+
+            Pickup Location
+
+        </h4>
+
+<div class="mb-3">
+
+    <label class="form-label fw-semibold">
+
+        Search Pickup Location
+
+    </label>
+
+    <div class="input-group">
+
+        <span class="input-group-text bg-white">
+
+            <i class="bi bi-search"></i>
+
+        </span>
+
+        <input
+            id="pickupSearch"
+            class="form-control"
+            type="text"
+            placeholder="Search any location...">
+
+    </div>
+
+    <small class="text-muted">
+
+        Search an address or drag the marker to the exact pickup point.
+
+    </small>
+
+</div>
+
+<div
+    id="googleMap"
+    class="rounded-4 shadow-sm border"
+    style="height:420px;">
+</div>
+
+        <!-- Hidden Values -->
+<input
+    type="hidden"
+    id="latitude"
+    name="latitude"
+    value="{{ donation.latitude if donation else '' }}">
+
+<input
+    type="hidden"
+    id="longitude"
+    name="longitude"
+    value="{{ donation.longitude if donation else '' }}">
+
+<input
+    type="hidden"
+    id="formattedAddress"
+    name="pickup_address"
+    value="{{ donation.pickup_address if donation else '' }}">
+        <!-- Display -->
+
+        <div class="row mt-4 g-3">
+
+            <div class="col-md-6">
+
+                <label class="form-label">
+
+                    Latitude
+
+                </label>
+
+                <input
+                    id="latitude_display"
+                    class="form-control"
+                    readonly>
+
+            </div>
+            <div class="col-12">
+
+    <label class="form-label">
+
+        Selected Address
+
+    </label>
+
+    <textarea
+        id="addressDisplay"
+        class="form-control"
+        rows="3"
+        readonly></textarea>
+
+</div>
+
+            <div class="col-md-6">
+
+                <label class="form-label">
+
+                    Longitude
+
+                </label>
+
+                <input
+                    id="longitude_display"
+                    class="form-control"
+                    readonly>
+
+            </div>
+
+        </div>
+
+               </div>
+
+        </div>
+
+        <!-- ================= ACTION BUTTONS ================= -->
+
+        <div class="d-flex justify-content-between align-items-center mt-5">
+
+            <a
+                href="{{ url_for('donor.my_donations') }}"
+                class="btn btn-outline-secondary btn-lg rounded-pill px-4">
+
+                <i class="bi bi-arrow-left"></i>
+
+                Cancel
+
+            </a>
+
+            <button
+                type="submit"
+                class="btn btn-success btn-lg rounded-pill px-5 shadow">
+
+                {% if donation %}
+
+                <i class="bi bi-check-circle-fill"></i>
+
+                Update Donation
+
+                {% else %}
+
+                <i class="bi bi-plus-circle-fill"></i>
+
+                Add Food Donation
+
+                {% endif %}
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>

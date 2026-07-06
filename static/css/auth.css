@@ -1,0 +1,434 @@
+/* ==========================================
+   GLOBAL
+========================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+
+    background:linear-gradient(135deg,#F5FAF5,#EEF7EE);
+
+    min-height:100vh;
+
+    overflow-x:hidden;
+
+    overflow-y:auto;
+
+}
+/* ==========================================
+   LAYOUT
+========================================== */
+
+.container-fluid{
+
+    padding:0;
+
+    min-height:100vh;
+
+}
+
+.auth-card{
+
+    width:100%;
+
+    max-width:680px;
+
+    background:#fff;
+
+    border-radius:24px;
+
+    padding:35px;
+
+    box-shadow:0 18px 45px rgba(0,0,0,.08);
+
+    margin:25px auto;
+
+}
+.auth-side{
+
+    background:linear-gradient(135deg,#EAF8EC,#F7FFF8);
+
+    min-height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:40px;
+
+    position:sticky;
+
+    top:0;
+
+}
+
+/* ==========================================
+   LOGO
+========================================== */
+
+.brand-logo{
+
+    height:58px;
+
+    width:auto;
+
+    margin-bottom:12px;
+
+}
+
+/* ==========================================
+   HEADINGS
+========================================== */
+
+.auth-card h2{
+
+    font-weight:700;
+
+    color:#1E293B;
+
+    font-size:2.3rem;
+
+    margin-bottom:12px;
+
+}
+
+.auth-card p{
+
+    color:#64748B;
+
+    line-height:1.5;
+
+    margin-bottom:18px;
+
+}
+
+/* ==========================================
+   SECTION TITLE
+========================================== */
+
+.section-title{
+
+    margin-top:22px;
+
+margin-bottom:15px;
+
+    padding-bottom:10px;
+
+    border-bottom:2px solid #E2E8F0;
+
+    font-weight:600;
+
+    color:#2E7D32;
+
+}
+
+.section-title i{
+
+    margin-right:8px;
+
+}
+
+/* ==========================================
+   LABELS
+========================================== */
+
+label{
+
+    font-weight:500;
+
+    margin-bottom:8px;
+
+    color:#334155;
+
+}
+
+/* ==========================================
+   INPUTS
+========================================== */
+
+.form-control{
+
+    border-radius:14px;
+
+    border:1px solid #D9E2EC;
+
+    height:48px;
+
+    padding:12px 18px;
+
+    transition:.3s;
+
+    box-shadow:none;
+
+}
+
+.form-control:focus{
+
+    border-color:#2E7D32;
+
+    box-shadow:0 0 0 4px rgba(46,125,50,.12);
+
+}
+
+/* ==========================================
+   CHECKBOX
+========================================== */
+
+.form-check{
+
+    margin-top:30px;
+
+}
+
+.form-check-label{
+
+    color:#475569;
+
+}
+
+/* ==========================================
+   BUTTON
+========================================== */
+
+.btn-success{
+
+    background:#2E7D32;
+
+    border:none;
+
+    border-radius:14px;
+
+    font-size:17px;
+
+padding:10px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.btn-success:hover{
+
+    background:#256D28;
+
+    transform:translateY(-2px);
+
+}
+
+/* ==========================================
+   LOGIN LINK
+========================================== */
+
+.text-center a{
+
+    text-decoration:none;
+
+    color:#2E7D32;
+
+    font-weight:600;
+
+}
+
+.text-center a:hover{
+
+    text-decoration:underline;
+
+}
+
+/* ==========================================
+   HERO
+========================================== */
+
+.hero-image{
+
+    width:280px;
+
+    max-width:100%;
+
+}
+
+.auth-side h2{
+
+    margin-top:35px;
+
+    font-weight:700;
+
+    color:#2E7D32;
+
+}
+
+.auth-side p{
+
+    color:#64748B;
+
+    max-width:420px;
+
+    margin:auto;
+
+    line-height:1.8;
+
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media(max-width:992px){
+
+    .auth-side{
+
+        display:none !important;
+
+    }
+
+    .auth-card{
+
+        margin:30px;
+
+        padding:35px;
+
+    }
+
+}
+.progress{
+
+    border-radius:20px;
+
+}
+
+.input-group .btn{
+
+    border-radius:0 14px 14px 0;
+
+}
+
+#passwordMatchMessage{
+
+    font-weight:500;
+
+}
+/* ==========================
+   Wizard Progress
+========================== */
+
+.wizard-progress{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:0;
+
+    margin:40px 0;
+
+}
+
+.progress-step{
+
+    width:45px;
+
+    height:45px;
+
+    border-radius:50%;
+
+    background:#D1D5DB;
+
+    color:white;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-weight:700;
+
+    font-size:18px;
+
+    transition:.3s;
+
+}
+
+.progress-step.active{
+
+    background:#2E7D32;
+
+}
+
+.progress-step.completed{
+
+    background:#2E7D32;
+
+}
+
+.progress-line{
+
+    width:120px;
+
+    height:4px;
+
+    background:#D1D5DB;
+
+}
+/* ==========================================
+   LARGE FORM FIX
+========================================== */
+
+@media (min-width:992px){
+
+    .auth-card{
+
+        max-height:92vh;
+
+        overflow-y:auto;
+
+        scrollbar-width:thin;
+
+    }
+
+    .auth-card::-webkit-scrollbar{
+
+        width:8px;
+
+    }
+
+    .auth-card::-webkit-scrollbar-thumb{
+
+        background:#2E7D32;
+
+        border-radius:20px;
+
+    }
+
+}
+/* ==========================================
+   EXTRA SMALL DEVICES
+========================================== */
+
+@media (max-width:576px){
+
+    .auth-card{
+
+        width:98%;
+
+        max-width:98%;
+
+        margin:10px auto;
+
+        padding:24px;
+
+        border-radius:18px;
+
+    }
+
+}

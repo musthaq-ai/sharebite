@@ -1,0 +1,329 @@
+{% extends "base.html" %}
+
+{% block title %}
+My Donations
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- Page Header -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+                <i class="bi bi-box2-heart-fill text-success"></i>
+                My Food Donations
+            </h2>
+
+            <p class="text-muted">
+                View, edit and manage all your food donations.
+            </p>
+
+        </div>
+
+        <a href="{{ url_for('donor.add_food') }}"
+           class="btn btn-success rounded-pill px-4">
+
+            <i class="bi bi-plus-circle"></i>
+
+            Add Donation
+
+        </a>
+
+    </div>
+
+<div class="card shadow-sm border-0 mb-4">
+
+    <div class="card-body">
+
+        <form method="GET">
+
+            <div class="row g-3">
+
+                <div class="col-lg-6">
+
+                    <input
+                        type="text"
+                        name="search"
+                        class="form-control"
+                        placeholder="🔍 Search by food name..."
+                        value="{{ search }}">
+
+                </div>
+
+                <div class="col-lg-3">
+
+                    <select
+                        class="form-select"
+                        name="status">
+
+                        <option
+                            value="All"
+                            {% if status=="All" %}selected{% endif %}>
+                            All Status
+                        </option>
+
+                        <option
+                            value="Available"
+                            {% if status=="Available" %}selected{% endif %}>
+                            Available
+                        </option>
+
+                        <option
+                            value="Booked"
+                            {% if status=="Booked" %}selected{% endif %}>
+                            Booked
+                        </option>
+
+                        <option
+                            value="Completed"
+                            {% if status=="Completed" %}selected{% endif %}>
+                            Completed
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-lg-3 d-grid">
+
+                    <button
+                        class="btn btn-success">
+
+                        <i class="bi bi-search"></i>
+
+                        Search
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+    {% if donations %}
+
+    <div class="row g-4">
+
+        {% for donation in donations %}
+
+        <div class="col-lg-4 col-md-6">
+
+            <div class="card border-0 shadow-lg h-100 donation-card">
+
+                <!-- Image -->
+
+                {% if donation.image %}
+
+                <img
+                    src="{{ url_for('static', filename='uploads/food/' + donation.image) }}"
+                    class="card-img-top"
+                    style="height:220px;object-fit:cover;">
+
+                {% else %}
+
+                <img
+                    src="https://placehold.co/700x400?text=Food+Donation"
+                    class="card-img-top"
+                    style="height:220px;object-fit:cover;">
+
+                {% endif %}
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <h4 class="fw-bold">
+
+                            {{ donation.food_name }}
+
+                        </h4>
+
+                        {% if donation.status=="Available" %}
+
+                        <span class="badge bg-success">
+
+                            {{ donation.status }}
+
+                        </span>
+
+                        {% elif donation.status=="Booked" %}
+
+                        <span class="badge bg-warning text-dark">
+
+                            {{ donation.status }}
+
+                        </span>
+
+                        {% elif donation.status=="Completed" %}
+
+                        <span class="badge bg-primary">
+
+                            {{ donation.status }}
+
+                        </span>
+
+                        {% else %}
+
+                        <span class="badge bg-danger">
+
+                            {{ donation.status }}
+
+                        </span>
+
+                        {% endif %}
+
+                    </div>
+
+                    <hr>
+
+                    <p>
+
+                        <i class="bi bi-box-fill text-success"></i>
+
+                        <strong>Quantity:</strong>
+
+                        {{ donation.quantity }}
+
+                    </p>
+
+                    <p>
+
+                        <i class="bi bi-grid-fill text-primary"></i>
+
+                        <strong>Category:</strong>
+
+                        {{ donation.category }}
+
+                    </p>
+
+                    <p>
+
+                        <i class="bi bi-egg-fried text-warning"></i>
+
+                        <strong>Food Type:</strong>
+
+                        {{ donation.veg_nonveg }}
+
+                    </p>
+
+                    <p>
+
+                        <i class="bi bi-clock-history text-danger"></i>
+
+                        <strong>Expiry:</strong>
+
+                        {{ donation.expiry_time }}
+
+                    </p>
+
+                </div>
+
+                <div class="card-footer bg-white border-0">
+
+                    <div class="d-grid gap-2">
+
+                        <!-- View -->
+
+                        <a href="{{ url_for('donor.view_donation',
+donation_id=donation.id) }}"
+   class="btn btn-outline-primary rounded-pill">
+
+                            <i class="bi bi-eye-fill"></i>
+
+                            View
+
+                        </a>
+
+                        <!-- Edit -->
+
+                        <a href="{{ url_for('donor.edit_donation',
+                        donation_id=donation.id) }}"
+                           class="btn btn-outline-warning rounded-pill">
+
+                            <i class="bi bi-pencil-square"></i>
+
+                            Edit
+
+                        </a>
+
+                        <!-- Delete -->
+
+                        <form
+                            action="{{ url_for('donor.delete_food',
+                            donation_id=donation.id) }}"
+                            method="POST"
+                            class="deleteForm">
+
+                            <button
+                                class="btn btn-outline-danger rounded-pill w-100">
+
+                                <i class="bi bi-trash-fill"></i>
+
+                                Delete
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <!-- Empty State -->
+
+    <div class="card border-0 shadow-lg">
+
+        <div class="card-body text-center py-5">
+
+            <i class="bi bi-box2-heart display-1 text-success"></i>
+
+            <h3 class="mt-4">
+
+                No Donations Yet
+
+            </h3>
+
+            <p class="text-muted">
+
+                Start helping people by donating your surplus food.
+
+            </p>
+
+            <a href="{{ url_for('donor.add_food') }}"
+               class="btn btn-success btn-lg rounded-pill px-5">
+
+                <i class="bi bi-plus-circle"></i>
+
+                Donate Food
+
+            </a>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

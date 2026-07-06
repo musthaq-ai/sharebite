@@ -1,0 +1,378 @@
+{% extends "base.html" %}
+
+{% block title %}
+Donor Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- Header -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+
+                Welcome back,
+
+                <span class="text-success">
+
+                    {{ session['user_name'] }}
+
+                </span>
+
+                👋
+
+            </h2>
+
+            <p class="text-muted">
+
+                Here's an overview of your food donation activities.
+
+            </p>
+
+        </div>
+
+        <a href="{{ url_for('donor.add_food') }}"
+           class="btn btn-success rounded-pill px-4">
+
+            <i class="bi bi-plus-circle"></i>
+
+            Add Donation
+
+        </a>
+
+    </div>
+
+    <!-- Statistics -->
+
+    <div class="row g-4">
+
+        <div class="col-lg-3">
+
+            <div class="card stat-card fade-up">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+
+                        Total Donations
+
+                    </h6>
+
+                    <h1 class="fw-bold text-success">
+
+                        {{ total_donations }}
+
+                    </h1>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3">
+
+            <div class="card stat-card fade-up">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+
+                        Available
+
+                    </h6>
+
+                    <h1 class="fw-bold text-primary">
+
+                        {{ available_food }}
+
+                    </h1>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3">
+
+            <div class="card stat-card fade-up">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+
+                        Booked
+
+                    </h6>
+
+                    <h1 class="fw-bold text-warning">
+
+                        {{ booked_food }}
+
+                    </h1>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3">
+
+            <div class="card stat-card fade-up">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+
+                        Completed
+
+                    </h6>
+
+                    <h1 class="fw-bold text-danger">
+
+                        {{ completed_food }}
+
+                    </h1>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Charts -->
+
+    <div class="row mt-5">
+
+        <div class="col-lg-8">
+
+            <div class="card stat-card fade-up">
+
+                <div class="card-header bg-white">
+
+                    <h5 class="mb-0">
+
+                        Weekly Donations
+
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    <canvas id="weeklyChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-4">
+
+            <div class="card stat-card fade-up">
+
+                <div class="card-header bg-white">
+
+                    <h5 class="mb-0">
+
+                        Donation Status
+
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    <canvas id="statusChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Recent Donations -->
+
+    <div class="card shadow border-0 mt-5">
+
+        <div class="card-header bg-white">
+
+            <h5 class="mb-0">
+
+                Recent Donations
+
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Food</th>
+
+                            <th>Quantity</th>
+
+                            <th>Status</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    {% for donation in recent_donations %}
+
+                    <tr>
+
+                        <td>
+
+                            {{ donation.food_name }}
+
+                        </td>
+
+                        <td>
+
+                            {{ donation.quantity }}
+
+                        </td>
+
+                        <td>
+
+                            {% if donation.status=="Available" %}
+
+                            <span class="badge bg-success">
+
+                                Available
+
+                            </span>
+
+                            {% elif donation.status=="Booked" %}
+
+                            <span class="badge bg-warning text-dark">
+
+                                Booked
+
+                            </span>
+
+                            {% else %}
+
+                            <span class="badge bg-primary">
+
+                                Completed
+
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<div class="card shadow-sm border-0 mt-4">
+
+    <div class="card-header bg-success text-white">
+
+        <h5 class="mb-0">
+
+            <i class="bi bi-geo-alt-fill"></i>
+
+            Your Current Location
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div
+            id="currentLocationMap"
+            style="height:400px;border-radius:15px;">
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Charts -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const weeklyCtx = document.getElementById("weeklyChart");
+
+    if (weeklyCtx) {
+
+        new Chart(weeklyCtx, {
+            type: "bar",
+            data: {
+                labels: {{ weekly_labels | tojson }},
+                datasets: [{
+                    label: "Donations",
+                    data: {{ weekly_counts | tojson }},
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+    }
+
+    const statusCtx = document.getElementById("statusChart");
+
+    if (statusCtx) {
+
+        new Chart(statusCtx, {
+            type: "doughnut",
+            data: {
+                labels: ["Available", "Booked", "Completed"],
+                datasets: [{
+                    data: {{ status_counts | tojson }}
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+    }
+
+});
+</script>
+
+{% endblock %}

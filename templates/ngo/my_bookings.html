@@ -1,0 +1,303 @@
+{% extends "base.html" %}
+
+{% block title %}
+My Bookings
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+
+                <i class="bi bi-bookmark-check-fill text-success"></i>
+
+                My Bookings
+
+            </h2>
+
+            <p class="text-muted">
+
+                View all your food booking requests.
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="row g-4">
+
+        {% for booking in bookings %}
+<!-- QR Modal -->
+
+<div
+    class="modal fade"
+    id="qrModal{{ booking.id }}"
+    tabindex="-1">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content rounded-4">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title">
+
+                    Pickup Verification QR
+
+                </h5>
+
+                <button
+                    class="btn-close"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body text-center">
+
+                <img
+
+                    src="{{ url_for('static', filename='qr_codes/' ~ booking.qr_image) }}"
+
+                    class="img-fluid rounded-3 shadow"
+
+                    style="max-width:280px;">
+
+                <p class="mt-4 text-muted">
+
+                    Show this QR code to the donor.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+        <div class="col-lg-4 col-md-6">
+
+            <div class="card donation-card h-100">
+
+                {% if booking.food.image %}
+
+                <img
+                    src="{{ url_for('static', filename='uploads/food/' + booking.food.image) }}"
+                    class="card-img-top"
+                    style="height:220px;object-fit:cover;">
+
+                {% else %}
+
+                <img
+                    src="https://placehold.co/600x350?text=Food"
+                    class="card-img-top"
+                    style="height:220px;object-fit:cover;">
+
+                {% endif %}
+
+                <div class="card-body">
+
+                    <h4 class="fw-bold">
+
+                        {{ booking.food.food_name }}
+
+                    </h4>
+
+                    <p class="text-success fw-semibold">
+
+                        <i class="bi bi-building-fill"></i>
+
+                        {{ booking.food.donor.organization_name }}
+
+                    </p>
+
+                    <hr>
+
+                    <p>
+
+                        <strong>Quantity:</strong>
+
+                        {{ booking.food.quantity }}
+
+                    </p>
+
+                    <p>
+
+                        <strong>Booked On:</strong>
+
+                        {{ booking.booking_time }}
+
+                    </p>
+
+                    <p>
+
+                        <strong>Status:</strong>
+
+                        {% if booking.booking_status == "Pending" %}
+
+                            <span class="badge bg-warning text-dark">
+
+                                Pending
+
+                            </span>
+
+                        {% elif booking.booking_status == "Accepted" %}
+
+                            <span class="badge bg-success">
+
+                                Accepted
+
+                            </span>
+
+                        {% elif booking.booking_status == "Picked Up" %}
+
+                            <span class="badge bg-info text-dark">
+
+                                Picked Up
+
+                            </span>
+
+                        {% elif booking.booking_status == "Completed" %}
+
+                            <span class="badge bg-primary">
+
+                                Completed
+
+                            </span>
+
+                        {% elif booking.booking_status == "Rejected" %}
+
+                            <span class="badge bg-danger">
+
+                                Rejected
+
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-secondary">
+
+                                {{ booking.booking_status }}
+
+                            </span>
+
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+<div class="card-footer bg-white border-0">
+
+    {% if booking.booking_status == "Accepted" and booking.qr_image %}
+
+    <div class="d-grid gap-2">
+
+        <button
+            class="btn btn-success rounded-pill"
+            data-bs-toggle="modal"
+            data-bs-target="#qrModal{{ booking.id }}">
+
+            <i class="bi bi-qr-code"></i>
+
+            Show Pickup QR
+
+        </button>
+
+        <a
+            href="{{ url_for('static', filename='qr_codes/' ~ booking.qr_image) }}"
+            download
+            class="btn btn-outline-success rounded-pill">
+
+            <i class="bi bi-download"></i>
+
+            Download QR
+
+        </a>
+
+        <form
+            method="POST"
+            action="{{ url_for('ngo.pickup_food', booking_id=booking.id) }}">
+
+            <button
+                class="btn btn-primary w-100 rounded-pill mt-2">
+
+                <i class="bi bi-truck"></i>
+
+                Mark as Picked Up
+
+            </button>
+
+        </form>
+
+    </div>
+
+    {% elif booking.booking_status == "Picked Up" %}
+
+    <div class="text-center">
+
+        <span class="badge bg-info fs-6">
+
+            Waiting for Donor Confirmation
+
+        </span>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+            </div>
+
+        </div>
+
+        {% else %}
+
+        <div class="col-12">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body text-center py-5">
+
+                    <i class="bi bi-bookmark-x display-1 text-secondary"></i>
+
+                    <h3 class="mt-3">
+
+                        No Bookings Yet
+
+                    </h3>
+
+                    <p class="text-muted">
+
+                        Browse available food and place your first booking.
+
+                    </p>
+
+                    <a href="{{ url_for('ngo.available_food') }}"
+                       class="btn btn-success rounded-pill">
+
+                        Browse Food
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

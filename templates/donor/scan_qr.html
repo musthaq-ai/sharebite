@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}
+Scan NGO QR
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-7">
+
+            <div class="card border-0 shadow-lg rounded-4">
+
+                <div class="card-body p-4">
+
+                    <div class="text-center mb-4">
+
+                        <div class="scanner-icon mb-3">
+
+                            <i class="bi bi-qr-code-scan"></i>
+
+                        </div>
+
+                        <h2 class="fw-bold">
+
+                            Scan NGO QR
+
+                        </h2>
+
+                        <p class="text-muted">
+
+                            Ask the NGO representative to show their QR code.
+
+                        </p>
+
+                    </div>
+
+                    <!-- Camera -->
+
+                    <div class="scanner-wrapper">
+
+                        <div id="reader"></div>
+
+                        <div class="scanner-line"></div>
+
+                    </div>
+
+                    <div
+                        id="result"
+                        class="alert alert-success mt-4 d-none">
+
+                    </div>
+
+                    <div class="text-center mt-4">
+
+                        <small class="text-muted">
+
+                            <i class="bi bi-camera-fill"></i>
+
+                            Rear camera will be used automatically on mobile devices.
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block page_scripts %}
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+
+<script src="{{ url_for('static', filename='js/scan_qr.js') }}"></script>
+
+{% endblock %}

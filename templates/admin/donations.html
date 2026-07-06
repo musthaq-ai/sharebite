@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+
+{% block title %}
+Manage Donations
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+
+                🍱 Manage Donations
+
+            </h2>
+
+            <p class="text-muted">
+
+                View and manage all food donations.
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <form method="GET" class="row mb-4">
+
+        <div class="col-md-5">
+
+            <input
+                type="text"
+                class="form-control"
+                name="search"
+                placeholder="Search food name">
+
+        </div>
+
+        <div class="col-md-3">
+
+            <select
+                class="form-select"
+                name="status">
+
+                <option value="All">All Status</option>
+                <option>Available</option>
+                <option>Pending</option>
+                <option>Booked</option>
+                <option>Picked Up</option>
+                <option>Completed</option>
+
+            </select>
+
+        </div>
+
+        <div class="col-md-2">
+
+            <button
+                class="btn btn-primary w-100">
+
+                Search
+
+            </button>
+
+        </div>
+
+    </form>
+
+    <div class="card shadow">
+
+        <div class="table-responsive">
+
+            <table class="table table-striped">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>Image</th>
+
+                        <th>Food</th>
+
+                        <th>Donor</th>
+
+                        <th>Quantity</th>
+
+                        <th>Status</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for donation in donations %}
+
+                    <tr>
+
+                        <td>
+
+                            {% if donation.image %}
+
+                            <img
+                                src="{{ url_for('static', filename='uploads/food/' + donation.image) }}"
+                                width="70"
+                                class="rounded">
+
+                            {% else %}
+
+                            No Image
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>{{ donation.food_name }}</td>
+
+                        <td>
+
+    <strong>{{ donation.donor.organization_name }}</strong>
+
+    <br>
+
+    <small class="text-muted">
+
+        {{ donation.donor.name }}
+
+    </small>
+
+</td>
+
+                        <td>{{ donation.quantity }}</td>
+
+                        <td>
+
+                            <span class="badge bg-success">
+
+                                {{ donation.status }}
+
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <form
+                                method="POST"
+                                action="{{ url_for('admin.delete_donation_route', donation_id=donation.id) }}">
+
+                                <button
+                                    class="btn btn-danger btn-sm">
+
+                                    Delete
+
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

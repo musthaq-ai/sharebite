@@ -1,0 +1,303 @@
+{% extends "base.html" %}
+
+{% block title %}
+Food Details
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- Header -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+
+                <i class="bi bi-basket-fill text-success"></i>
+
+                Food Details
+
+            </h2>
+
+            <p class="text-muted">
+
+                View complete information about this food donation.
+
+            </p>
+
+        </div>
+
+        <a href="{{ url_for('ngo.available_food') }}"
+           class="btn btn-outline-success rounded-pill">
+
+            <i class="bi bi-arrow-left"></i>
+
+            Back
+
+        </a>
+
+    </div>
+
+    <div class="row">
+
+        <!-- LEFT SIDE -->
+
+        <div class="col-lg-7">
+
+            <div class="card shadow-lg border-0">
+
+                {% if donation.image %}
+
+                <img
+                        src="{{ url_for('static', filename='uploads/food/' + donation.image) }}"
+                        class="card-img-top"
+                        style="height:420px;object-fit:cover;">
+
+                {% else %}
+
+                <img
+                        src="https://placehold.co/900x450?text=Food+Donation"
+                        class="card-img-top"
+                        style="height:420px;object-fit:cover;">
+
+                {% endif %}
+
+                <div class="card-body">
+
+                    <h2 class="fw-bold">
+
+                        {{ donation.food_name }}
+
+                    </h2>
+
+                    <h5 class="text-success mb-4">
+
+                        <i class="bi bi-building-fill"></i>
+
+                        {{ donation.donor.organization_name }}
+
+                    </h5>
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+
+                            <p>
+
+                                <i class="bi bi-box-fill text-success"></i>
+
+                                <strong>Quantity:</strong>
+
+                                {{ donation.quantity }}
+
+                            </p>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <p>
+
+                                <i class="bi bi-grid-fill text-primary"></i>
+
+                                <strong>Category:</strong>
+
+                                {{ donation.category }}
+
+                            </p>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <p>
+
+                                <i class="bi bi-egg-fried text-warning"></i>
+
+                                <strong>Food Type:</strong>
+
+                                {{ donation.veg_nonveg }}
+
+                            </p>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <p>
+
+                                <i class="bi bi-check-circle-fill text-success"></i>
+
+                                <strong>Status:</strong>
+
+                                {{ donation.status }}
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <hr>
+
+                    <h5>
+
+                        Description
+
+                    </h5>
+
+                    <p>
+
+                        {{ donation.description }}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT SIDE -->
+
+        <div class="col-lg-5">
+
+            <div class="card shadow-lg border-0 mb-4">
+
+                <div class="card-body">
+
+                    <h4 class="fw-bold">
+
+                        Pickup Information
+
+                    </h4>
+
+                    <hr>
+
+                    <p>
+
+                        <i class="bi bi-geo-alt-fill text-danger"></i>
+
+                        <strong>Address</strong>
+
+                    </p>
+
+                    <p>
+
+                        {{ donation.pickup_address }}
+
+                    </p>
+
+                    <p>
+
+                        <i class="bi bi-clock-history text-primary"></i>
+
+                        <strong>Prepared Time</strong>
+
+                    </p>
+
+                    <p>
+
+                        {{ donation.prepared_time }}
+
+                    </p>
+
+                    <p>
+
+                        <i class="bi bi-alarm-fill text-danger"></i>
+
+                        <strong>Expiry Time</strong>
+
+                    </p>
+
+                    <p>
+
+                        {{ donation.expiry_time }}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- MAP -->
+
+            <div class="card shadow-lg border-0 mb-4">
+
+                <div class="card-body">
+
+                    <h4 class="fw-bold">
+
+                        Pickup Location
+
+                    </h4>
+
+                    <div
+                            id="foodMap"
+                            style="height:300px;border-radius:15px;">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- BOOK BUTTON -->
+
+            <div class="d-grid">
+
+                <form
+    method="POST"
+    action="{{ url_for('ngo.book_food_route', food_id=donation.id) }}">
+
+    <button
+        class="btn btn-success btn-lg rounded-pill w-100">
+
+        <i class="bi bi-bookmark-check-fill"></i>
+
+        Book Food
+
+    </button>
+
+</form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+document.addEventListener("DOMContentLoaded",function(){
+
+const lat={{ donation.latitude }};
+
+const lng={{ donation.longitude }};
+
+const map=L.map("foodMap").setView([lat,lng],15);
+
+L.tileLayer(
+
+"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+
+{
+
+attribution:"© OpenStreetMap"
+
+}
+
+).addTo(map);
+
+L.marker([lat,lng]).addTo(map);
+
+});
+
+</script>
+
+{% endblock %}

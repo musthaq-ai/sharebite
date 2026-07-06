@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}
+Add Food Donation
+{% endblock %}
+
+{% block content %}
+
+{% include "components/food_form.html" %}
+
+{% endblock %}
+
+{% block page_scripts %}
+
+<script src="{{ url_for('static', filename='js/food_camera.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/food_form.js') }}"></script>
+
+{% endblock %}

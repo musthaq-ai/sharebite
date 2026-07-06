@@ -1,0 +1,249 @@
+{% if session.get("role") == "Donor" %}
+
+<!-- ===========================
+Desktop Sidebar
+=========================== -->
+
+<div class="col-lg-2 bg-dark min-vh-100 p-3 d-none d-lg-block sidebar">
+
+    <h5 class="text-white mb-4">
+        🏨 Donor Panel
+    </h5>
+
+    <div class="list-group">
+
+        <a href="{{ url_for('donor.dashboard') }}" class="list-group-item list-group-item-action">
+            <i class="bi bi-speedometer2"></i> Dashboard
+        </a>
+
+        <a href="{{ url_for('donor.add_food') }}" class="list-group-item list-group-item-action">
+            <i class="bi bi-plus-circle"></i> Add Food
+        </a>
+
+        <a href="{{ url_for('donor.my_donations') }}" class="list-group-item list-group-item-action">
+            <i class="bi bi-box-seam"></i> My Donations
+        </a>
+
+        <a href="{{ url_for('donor.booking_requests') }}" class="list-group-item list-group-item-action">
+            <i class="bi bi-bell"></i> Booking Requests
+        </a>
+
+        <a href="{{ url_for('donor.scan_qr') }}" class="list-group-item list-group-item-action">
+            <i class="bi bi-qr-code-scan"></i> Scan NGO QR
+        </a>
+
+        <a href="{{ url_for('kyc.upload') }}" class="list-group-item list-group-item-action">
+            <i class="bi bi-file-earmark-arrow-up-fill"></i> Upload KYC
+        </a>
+
+    </div>
+
+</div>
+
+<!-- ===========================
+Mobile Sidebar
+=========================== -->
+
+<div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar">
+
+    <div class="offcanvas-header">
+
+        <h5 class="offcanvas-title">
+            🏨 Donor Panel
+        </h5>
+
+        <button class="btn-close" data-bs-dismiss="offcanvas"></button>
+
+    </div>
+
+    <div class="offcanvas-body">
+
+        <div class="list-group">
+
+            <a href="{{ url_for('donor.dashboard') }}" class="list-group-item list-group-item-action">
+                <i class="bi bi-speedometer2"></i> Dashboard
+            </a>
+
+            <a href="{{ url_for('donor.add_food') }}" class="list-group-item list-group-item-action">
+                <i class="bi bi-plus-circle"></i> Add Food
+            </a>
+
+            <a href="{{ url_for('donor.my_donations') }}" class="list-group-item list-group-item-action">
+                <i class="bi bi-box-seam"></i> My Donations
+            </a>
+
+            <a href="{{ url_for('donor.booking_requests') }}" class="list-group-item list-group-item-action">
+                <i class="bi bi-bell"></i> Booking Requests
+            </a>
+
+            <a href="{{ url_for('donor.scan_qr') }}" class="list-group-item list-group-item-action">
+                <i class="bi bi-qr-code-scan"></i> Scan NGO QR
+            </a>
+
+            <a href="{{ url_for('kyc.upload') }}" class="list-group-item list-group-item-action">
+                <i class="bi bi-file-earmark-arrow-up-fill"></i> Upload KYC
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% elif session.get("role") == "NGO" %}
+
+<!-- Desktop -->
+
+<div class="col-lg-2 bg-dark min-vh-100 p-3 d-none d-lg-block sidebar">
+
+    <h5 class="text-white mb-4">
+        🏢 NGO Panel
+    </h5>
+
+    <div class="list-group">
+
+        <a href="{{ url_for('ngo.dashboard') }}" class="list-group-item list-group-item-action">
+            <i class="bi bi-speedometer2"></i> Dashboard
+        </a>
+
+        <a href="{{ url_for('ngo.available_food') }}" class="list-group-item list-group-item-action">
+            <i class="bi bi-box2-heart"></i> Available Food
+        </a>
+
+        <a href="{{ url_for('ngo.my_bookings') }}" class="list-group-item list-group-item-action">
+            <i class="bi bi-bookmark-check"></i> My Bookings
+        </a>
+
+        <a href="{{ url_for('kyc.upload') }}" class="list-group-item list-group-item-action">
+            <i class="bi bi-file-earmark-arrow-up-fill"></i> Upload KYC
+        </a>
+
+    </div>
+
+</div>
+
+<!-- Mobile -->
+
+<div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar">
+
+    <div class="offcanvas-header">
+
+        <h5 class="offcanvas-title">
+            🏢 NGO Panel
+        </h5>
+
+        <button class="btn-close" data-bs-dismiss="offcanvas"></button>
+
+    </div>
+
+    <div class="offcanvas-body">
+
+        <div class="list-group">
+
+            <a href="{{ url_for('ngo.dashboard') }}" class="list-group-item list-group-item-action">
+                <i class="bi bi-speedometer2"></i> Dashboard
+            </a>
+
+            <a href="{{ url_for('ngo.available_food') }}" class="list-group-item list-group-item-action">
+                <i class="bi bi-box2-heart"></i> Available Food
+            </a>
+
+            <a href="{{ url_for('ngo.my_bookings') }}" class="list-group-item list-group-item-action">
+                <i class="bi bi-bookmark-check"></i> My Bookings
+            </a>
+
+            <a href="{{ url_for('kyc.upload') }}" class="list-group-item list-group-item-action">
+                <i class="bi bi-file-earmark-arrow-up-fill"></i> Upload KYC
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% elif session.get("role") == "Admin" %}
+
+<!-- Desktop -->
+
+<div class="col-lg-2 bg-dark min-vh-100 p-3 d-none d-lg-block sidebar">
+
+    <h5 class="text-white mb-4">
+        🛡️ Admin Panel
+    </h5>
+
+    <div class="list-group">
+
+        <a href="{{ url_for('admin.dashboard') }}" class="list-group-item list-group-item-action">
+            <i class="bi bi-speedometer2"></i> Dashboard
+        </a>
+
+        <a href="{{ url_for('admin.users') }}" class="list-group-item list-group-item-action">
+            <i class="bi bi-people-fill"></i> Manage Users
+        </a>
+
+        <a href="{{ url_for('admin.donations') }}" class="list-group-item list-group-item-action">
+            <i class="bi bi-box2-heart"></i> Manage Donations
+        </a>
+
+        <a href="{{ url_for('admin.bookings') }}" class="list-group-item list-group-item-action">
+            <i class="bi bi-bookmark-check-fill"></i> Manage Bookings
+        </a>
+
+        <a href="{{ url_for('admin.kyc_requests') }}" class="list-group-item list-group-item-action">
+            <i class="bi bi-person-vcard-fill"></i> KYC Verification
+        </a>
+
+    </div>
+
+</div>
+
+<!-- Mobile -->
+
+<div
+class="offcanvas offcanvas-start"
+tabindex="-1"
+id="mobileSidebar"
+style="z-index:1090;">
+
+    <div class="offcanvas-header">
+
+        <h5 class="offcanvas-title">
+            🛡️ Admin Panel
+        </h5>
+
+        <button class="btn-close" data-bs-dismiss="offcanvas"></button>
+
+    </div>
+
+    <div class="offcanvas-body">
+
+        <div class="list-group">
+
+            <a href="{{ url_for('admin.dashboard') }}" class="list-group-item list-group-item-action">
+                <i class="bi bi-speedometer2"></i> Dashboard
+            </a>
+
+            <a href="{{ url_for('admin.users') }}" class="list-group-item list-group-item-action">
+                <i class="bi bi-people-fill"></i> Manage Users
+            </a>
+
+            <a href="{{ url_for('admin.donations') }}" class="list-group-item list-group-item-action">
+                <i class="bi bi-box2-heart"></i> Manage Donations
+            </a>
+
+            <a href="{{ url_for('admin.bookings') }}" class="list-group-item list-group-item-action">
+                <i class="bi bi-bookmark-check-fill"></i> Manage Bookings
+            </a>
+
+            <a href="{{ url_for('admin.kyc_requests') }}" class="list-group-item list-group-item-action">
+                <i class="bi bi-person-vcard-fill"></i> KYC Verification
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endif %}

@@ -1,0 +1,1126 @@
+/* ==========================================
+   GOOGLE FONT
+========================================== */
+
+body{
+    background:#f5f7fb;
+    font-family:'Poppins',sans-serif;
+    color:#2d3436;
+}
+
+/* ==========================================
+   NAVBAR
+========================================== */
+
+.navbar{
+    height:70px;
+    background:white !important;
+    box-shadow:0 3px 15px rgba(0,0,0,.08);
+}
+
+/* ==========================================
+   SIDEBAR
+========================================== */
+
+.list-group-item{
+
+    border:none;
+
+    margin-bottom:10px;
+
+    border-radius:14px;
+
+    font-weight:500;
+
+    transition:.35s;
+
+}
+
+.list-group-item:hover{
+
+    background:#16a34a;
+
+    color:white;
+
+    transform:translateX(6px);
+
+}
+
+.list-group-item.active{
+
+    background:#16a34a;
+
+    color:white;
+
+}
+
+/* ==========================================
+   CARDS
+========================================== */
+
+.card{
+
+    border:none;
+
+    border-radius:22px;
+
+    background:white;
+
+    box-shadow:0 12px 35px rgba(0,0,0,.07);
+
+    transition:.35s;
+
+}
+
+.card:hover{
+
+    transform:translateY(-6px);
+
+    box-shadow:0 20px 45px rgba(0,0,0,.12);
+
+}
+
+/* ==========================================
+   DASHBOARD STAT CARDS
+========================================== */
+
+.stat-card{
+
+    position:relative;
+
+    overflow:hidden;
+
+    padding:25px;
+
+}
+
+.stat-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:0;
+
+    width:6px;
+
+    height:100%;
+
+    background:#22c55e;
+
+}
+
+.stat-card h1{
+
+    font-size:42px;
+
+    font-weight:700;
+
+    margin-top:10px;
+
+}
+
+.stat-card small{
+
+    color:#6c757d;
+
+}
+
+/* ==========================================
+   DONATION CARD
+========================================== */
+
+.donation-card{
+
+    overflow:hidden;
+
+    border-radius:22px;
+
+    transition:.35s;
+
+}
+
+.donation-card:hover{
+
+    transform:translateY(-10px);
+
+    box-shadow:0 25px 50px rgba(0,0,0,.15);
+
+}
+
+.card-img-top{
+
+    transition:.4s;
+
+}
+
+.donation-card:hover .card-img-top{
+
+    transform:scale(1.08);
+
+}
+
+/* ==========================================
+   BUTTONS
+========================================== */
+
+.btn{
+
+    border-radius:50px;
+
+    transition:.3s;
+
+    font-weight:500;
+
+}
+
+.btn-success{
+
+    background:#16a34a;
+
+    border:none;
+
+}
+
+.btn-success:hover{
+
+    background:#15803d;
+
+}
+
+.btn:hover{
+
+    transform:translateY(-3px);
+
+}
+
+/* ==========================================
+   BADGES
+========================================== */
+
+.badge{
+
+    padding:9px 18px;
+
+    border-radius:30px;
+
+    font-size:12px;
+
+    letter-spacing:.5px;
+
+}
+
+/* ==========================================
+   TABLE
+========================================== */
+
+.table{
+
+    vertical-align:middle;
+
+}
+
+.table thead{
+
+    background:#f8fafc;
+
+}
+
+.table tbody tr{
+
+    transition:.3s;
+
+}
+
+.table tbody tr:hover{
+
+    background:#f4fff6;
+
+}
+
+/* ==========================================
+   FORMS
+========================================== */
+
+.form-control,
+
+.form-select{
+
+    border-radius:12px;
+
+    border:1px solid #dee2e6;
+
+    padding:12px;
+
+}
+
+.form-control:focus,
+
+.form-select:focus{
+
+    border-color:#22c55e;
+
+    box-shadow:0 0 0 .2rem rgba(34,197,94,.18);
+
+}
+
+/* ==========================================
+   MAP
+========================================== */
+
+#map{
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+}
+
+/* ==========================================
+   CHARTS
+========================================== */
+
+canvas{
+
+    max-height:330px;
+
+}
+
+/* ==========================================
+   FOOTER
+========================================== */
+
+footer{
+
+    color:#999;
+
+    font-size:14px;
+
+    padding:20px;
+
+}
+
+/* ==========================================
+   SCROLLBAR
+========================================== */
+
+::-webkit-scrollbar{
+
+    width:8px;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#16a34a;
+
+    border-radius:10px;
+
+}
+
+::-webkit-scrollbar-track{
+
+    background:#f5f7fb;
+
+}
+
+/* ==========================================
+   ANIMATION
+========================================== */
+
+.fade-up{
+
+    animation:fadeUp .6s ease;
+
+}
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(20px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+/* ==========================================
+   Admin Dashboard Cards
+========================================== */
+
+.dashboard-card{
+
+    border:none;
+
+    border-radius:15px;
+
+    transition:.3s ease;
+
+    cursor:pointer;
+
+}
+
+.dashboard-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 20px 40px rgba(0,0,0,.18);
+
+}
+.navbar-logo{
+
+    height:50px;
+
+    width:auto;
+
+    object-fit:contain;
+
+}
+/* ==========================================
+   FOOD ITEM CARD
+========================================== */
+
+.food-item{
+
+    border:2px solid #E9ECEF !important;
+
+    border-radius:18px;
+
+    transition:.3s;
+
+    background:#fff;
+
+}
+
+.food-item:hover{
+
+    border-color:#198754 !important;
+
+    box-shadow:0 10px 30px rgba(25,135,84,.12);
+
+}
+
+.removeFoodItem{
+
+    margin-left:auto;
+
+}
+
+#addFoodItem{
+
+    font-weight:600;
+
+}
+/* Announcement Bar */
+
+.announcement-bar{
+
+    width:100%;
+
+    background:#198754;
+
+    color:white;
+
+    overflow:hidden;
+
+    white-space:nowrap;
+
+    padding:12px 0;
+
+    font-weight:600;
+
+    font-size:16px;
+
+    position:relative;
+
+}
+
+.announcement-track{
+
+    display:inline-block;
+
+    padding-left:100%;
+
+    animation:marquee 22s linear infinite;
+
+}
+
+@keyframes marquee{
+
+    0%{
+
+        transform:translateX(0);
+
+    }
+
+    100%{
+
+        transform:translateX(-100%);
+
+    }
+
+}
+.navbar{
+
+    height:80px;
+
+    padding:0 28px;
+
+}
+
+.navbar-brand img{
+
+    height:55px;
+
+}
+
+.navbar .btn{
+
+    font-weight:600;
+
+}
+/* ==========================
+   Notification Button
+========================== */
+
+.notification-btn{
+
+    width:48px;
+
+    height:48px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    border-radius:50%;
+
+    border:1px solid #E5E7EB;
+
+    background:#ffffff;
+
+    color:#2E7D32;
+
+    transition:.3s;
+
+}
+
+.notification-btn i{
+
+    font-size:22px;
+
+}
+
+.notification-btn:hover{
+
+    background:#2E7D32;
+
+    color:white;
+
+    transform:translateY(-2px);
+
+    box-shadow:0 8px 18px rgba(46,125,50,.25);
+
+}
+/* ==========================
+   Current Location
+========================== */
+
+/* ==========================
+   Location
+========================== */
+
+.location-pill{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:10px 18px;
+
+    background:#F4FBF5;
+
+    border:1px solid #D8EFD9;
+
+    border-radius:40px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    user-select:none;
+
+}
+
+.location-pill:hover{
+
+    background:#EAF8EC;
+
+    transform:translateY(-2px);
+
+}
+
+.location-pill i:first-child{
+
+    color:#2E7D32;
+
+    font-size:18px;
+
+}
+
+.location-pill .bi-chevron-down{
+
+    color:#888;
+
+    font-size:12px;
+
+}
+
+#currentLocation{
+
+    font-weight:600;
+
+    color:#2E7D32;
+
+    max-width:180px;
+
+    overflow:hidden;
+
+    white-space:nowrap;
+
+    text-overflow:ellipsis;
+
+}
+/* ==========================================
+   GOOGLE PLACES AUTOCOMPLETE
+========================================== */
+
+.pac-container{
+
+
+    border-radius:14px;
+
+    border:none;
+
+    box-shadow:0 12px 30px rgba(0,0,0,.15);
+
+    margin-top:6px;
+
+    font-family:'Poppins',sans-serif;
+     z-index:99999999 !important;
+
+    pointer-events:auto !important;
+
+}
+.modal{
+
+    z-index:1055;
+
+}
+
+.modal-backdrop{
+
+    z-index:1050;
+
+}
+.pac-item{
+
+    padding:12px 15px;
+
+    font-size:15px;
+
+    cursor:pointer;
+
+}
+
+.pac-item:hover{
+
+    background:#F5FAF5;
+
+}
+
+.pac-item-query{
+
+    color:#2E7D32;
+
+    font-weight:600;
+
+}
+/* ==========================================
+   MOBILE DASHBOARD
+========================================== */
+
+@media (max-width: 768px) {
+/* ===========================
+   MOBILE CONTENT SPACING
+=========================== */
+
+main{
+
+    padding-top:25px !important;
+
+}
+
+/* Welcome Section */
+
+.welcome-section{
+
+    margin-top:10px;
+
+}
+
+/* Welcome Heading */
+
+.welcome-section h1{
+
+    font-size:2rem;
+
+    line-height:1.2;
+
+}
+
+/* Add Donation Button */
+
+.add-donation-btn{
+
+    margin-top:15px;
+
+}
+    /* Navbar */
+    .navbar {
+
+        padding: 10px 15px;
+
+    }
+
+    .navbar-brand img{
+
+        height:42px;
+
+    }
+
+    /* Right navbar buttons */
+    .navbar .d-flex{
+
+        gap:8px;
+
+    }
+
+    #currentLocation{
+
+        max-width:140px;
+
+        font-size:14px;
+
+        padding:8px 12px;
+
+        white-space:nowrap;
+
+        overflow:hidden;
+
+        text-overflow:ellipsis;
+
+    }
+
+    /* Sidebar */
+    .sidebar{
+
+        width:100% !important;
+
+        position:relative !important;
+
+        height:auto !important;
+
+        min-height:auto;
+
+        padding:15px;
+
+    }
+
+    /* Main Content */
+    main{
+
+        margin-left:0 !important;
+
+        width:100% !important;
+
+        padding:20px !important;
+
+    }
+
+    /* Welcome Section */
+
+    .welcome-section{
+
+        flex-direction:column;
+
+        align-items:flex-start !important;
+
+        gap:15px;
+
+    }
+
+    /* Dashboard Cards */
+
+    .stats-card{
+
+        margin-bottom:20px;
+
+    }
+
+    /* Charts */
+
+    canvas{
+
+        max-width:100%;
+
+    }
+
+}
+/* ===========================
+   MOBILE NAVBAR
+=========================== */
+
+@media (max-width:991px){
+
+    .navbar{
+
+        padding:12px 15px 16px;
+
+        min-height:115px;
+
+        display:flex;
+
+        flex-direction:column;
+
+        justify-content:center;
+
+        align-items:stretch;
+
+    }
+
+    .navbar-logo{
+
+        height:40px;
+
+    }
+
+    .mobile-location-row{
+
+        margin-top:12px;
+
+    }
+
+    .location-pill{
+
+        width:100%;
+
+        height:46px;
+
+        display:flex;
+
+        align-items:center;
+
+        justify-content:center;
+
+        border-radius:30px;
+
+    }
+
+    #currentLocation{
+
+        max-width:170px;
+
+        overflow:hidden;
+
+        white-space:nowrap;
+
+        text-overflow:ellipsis;
+
+    }
+
+    .notification-btn{
+
+        width:42px;
+
+        height:42px;
+
+        display:flex;
+
+        align-items:center;
+
+        justify-content:center;
+
+    }
+
+    /* Move page below taller navbar */
+
+    main{
+
+        padding-top:20px !important;
+
+    }
+
+}
+/* ==========================================
+   QR Scanner
+========================================== */
+
+.scanner-icon{
+
+    width:80px;
+
+    height:80px;
+
+    margin:auto;
+
+    border-radius:50%;
+
+    background:#E8F5E9;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:38px;
+
+    color:#2E7D32;
+
+}
+
+.scanner-wrapper{
+
+    position:relative;
+
+    overflow:hidden;
+
+    border-radius:20px;
+
+}
+
+#reader{
+
+    width:100%;
+
+    border:none !important;
+
+}
+
+#reader video{
+
+    border-radius:20px;
+
+}
+
+#reader__dashboard{
+
+    display:none !important;
+
+}
+
+#reader__scan_region{
+
+    border:none !important;
+
+}
+
+.scanner-line{
+
+    position:absolute;
+
+    left:10%;
+
+    width:80%;
+
+    height:3px;
+
+    background:#00E676;
+
+    top:50%;
+
+    animation:scanline 2s infinite;
+
+}
+
+@keyframes scanline{
+
+    0%{
+
+        top:18%;
+
+    }
+
+    50%{
+
+        top:78%;
+
+    }
+
+    100%{
+
+        top:18%;
+
+    }
+
+}
+/* ==================================================
+   MOBILE OFFCANVAS FIX
+================================================== */
+
+.offcanvas{
+
+    background:#212529 !important;
+
+    color:#fff;
+
+    z-index:1080 !important;
+
+}
+
+.offcanvas-header{
+
+    background:#212529;
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+}
+
+.offcanvas-body{
+
+    background:#212529;
+
+}
+
+/* Prevent page showing through */
+
+.offcanvas-backdrop.show{
+
+    opacity:.6;
+
+}
+
+/* Sidebar links */
+
+.offcanvas .list-group-item{
+
+    background:#fff;
+
+    border:none;
+
+    border-radius:12px;
+
+    margin-bottom:10px;
+
+    font-weight:500;
+
+}
+
+/* White close button */
+
+.offcanvas .btn-close{
+
+    filter:invert(1);
+
+}
+/* Landing page stays behind offcanvas */
+
+.hero-section,
+.hero,
+.hero-content{
+
+    z-index:1 !important;
+
+    position:relative;
+
+}
+/* =====================================================
+   Landing Navbar Mobile Fix
+===================================================== */
+/* ==========================================
+   Landing Navbar Mobile Menu
+========================================== */
+
+@media (max-width:991px){
+
+    .navbar{
+
+        position:sticky;
+        top:0;
+        z-index:1100;
+        overflow:visible;
+
+    }
+
+    .mobile-menu{
+
+        position:absolute;
+
+        top:100%;
+
+        left:15px;
+
+        right:15px;
+
+        background:#fff;
+
+        border-radius:18px;
+
+        padding:20px;
+
+        box-shadow:0 15px 35px rgba(0,0,0,.15);
+
+        z-index:1200;
+
+    }
+
+    .mobile-menu .navbar-nav{
+
+        margin-bottom:15px;
+
+    }
+
+    .mobile-menu .nav-item{
+
+        margin-bottom:10px;
+
+    }
+
+    .mobile-menu .btn{
+
+        width:100%;
+
+        margin-top:10px;
+
+    }
+
+}
+/* ==========================================
+   Hide Hero Image on Mobile
+========================================== */
+
+@media (max-width: 991px){
+
+    .hero-image{
+
+        display: none !important;
+
+    }
+
+}

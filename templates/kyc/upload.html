@@ -1,0 +1,226 @@
+{% extends "base.html" %}
+
+{% block title %}
+Upload KYC
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-7">
+
+            <div class="card shadow">
+
+                <div class="card-header bg-primary text-white">
+
+                    <h3>
+
+                        <i class="bi bi-file-earmark-arrow-up-fill"></i>
+
+                        Upload KYC Document
+
+                    </h3>
+
+                </div>
+
+                <div class="card-body">
+
+                    {% if user.kyc_documents %}
+
+                        {% set kyc = user.kyc_documents[0] %}
+
+                        <!-- APPROVED -->
+
+                        {% if kyc.status == "Approved" %}
+
+                        <div class="alert alert-success">
+
+                            <i class="bi bi-patch-check-fill"></i>
+
+                            <strong>KYC Approved</strong><br>
+
+                            Your account has been verified successfully.
+
+                        </div>
+
+                        <div class="alert alert-secondary">
+
+                            <i class="bi bi-lock-fill"></i>
+
+                            KYC upload is locked.
+
+                        </div>
+
+                        <!-- PENDING -->
+
+                        {% elif kyc.status == "Pending" %}
+
+                        <div class="alert alert-warning">
+
+                            <i class="bi bi-hourglass-split"></i>
+
+                            <strong>KYC Pending</strong><br>
+
+                            Your document is waiting for admin verification.
+
+                        </div>
+
+                        <div class="alert alert-secondary">
+
+                            <i class="bi bi-lock-fill"></i>
+
+                            KYC upload is locked until verification is complete.
+
+                        </div>
+
+                        <!-- REJECTED -->
+
+                        {% elif kyc.status == "Rejected" %}
+
+                        <div class="alert alert-danger">
+
+                            <i class="bi bi-x-circle-fill"></i>
+
+                            <strong>KYC Rejected</strong>
+
+                            {% if kyc.rejection_reason %}
+
+                            <hr>
+
+                            <strong>Reason:</strong>
+
+                            {{ kyc.rejection_reason }}
+
+                            {% endif %}
+
+                        </div>
+
+                        {% if kyc.reupload_allowed == "Yes" %}
+
+                        <div class="alert alert-info">
+
+                            Admin has allowed you to upload a new document.
+
+                        </div>
+
+                        <form
+                            method="POST"
+                            enctype="multipart/form-data">
+
+                            <div class="mb-3">
+
+                                <label class="form-label">
+
+                                    Upload New Document
+
+                                </label>
+
+                                <input
+                                    type="file"
+                                    class="form-control"
+                                    name="document"
+                                    accept=".pdf,.jpg,.jpeg,.png"
+                                    required>
+
+                            </div>
+
+                            <button
+                                class="btn btn-success">
+
+                                <i class="bi bi-upload"></i>
+
+                                Upload Again
+
+                            </button>
+
+                        </form>
+
+                        {% else %}
+
+                        <div class="alert alert-secondary">
+
+                            <i class="bi bi-lock-fill"></i>
+
+                            Upload is locked.
+
+                            Please request the admin to allow re-upload.
+
+                        </div>
+
+                        <button
+                            class="btn btn-warning"
+                            disabled>
+
+                            Request Re-upload (Coming Soon)
+
+                        </button>
+
+                        {% endif %}
+
+                        {% endif %}
+
+                    {% else %}
+
+                    <!-- FIRST TIME UPLOAD -->
+
+                    <div class="alert alert-info">
+
+                        Upload your KYC document for verification.
+
+                    </div>
+
+                    <form
+                        method="POST"
+                        enctype="multipart/form-data">
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+
+                                Document
+
+                            </label>
+
+                            <input
+                                type="file"
+                                class="form-control"
+                                name="document"
+                                accept=".pdf,.jpg,.jpeg,.png"
+                                required>
+
+                            <small class="text-muted">
+
+                                Accepted formats:
+                                PDF, JPG, JPEG, PNG
+
+                            </small>
+
+                        </div>
+
+                        <button
+                            class="btn btn-success">
+
+                            <i class="bi bi-upload"></i>
+
+                            Upload KYC
+
+                        </button>
+
+                    </form>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

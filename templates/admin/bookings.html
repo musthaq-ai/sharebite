@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}
+Manage Bookings
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+
+                <i class="bi bi-bookmark-check-fill text-primary"></i>
+
+                Manage Bookings
+
+            </h2>
+
+            <p class="text-muted">
+
+                Monitor all booking requests across the platform.
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <form method="GET" class="row mb-4">
+
+        <div class="col-md-4">
+
+            <select
+                class="form-select"
+                name="status">
+
+                <option value="All">All Status</option>
+                <option>Pending</option>
+                <option>Accepted</option>
+                <option>Rejected</option>
+                <option>Picked Up</option>
+                <option>Completed</option>
+
+            </select>
+
+        </div>
+
+        <div class="col-md-2">
+
+            <button class="btn btn-primary w-100">
+
+                Filter
+
+            </button>
+
+        </div>
+
+    </form>
+
+    <div class="card shadow">
+
+        <div class="table-responsive">
+
+            <table class="table table-hover">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>Food</th>
+
+                        <th>Donor</th>
+
+                        <th>NGO</th>
+
+                        <th>Status</th>
+
+                        <th>Booked</th>
+
+                        <th>Pickup</th>
+
+                        <th>Completed</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for booking in bookings %}
+
+                    <tr>
+
+                        <td>
+
+                            {{ booking.food.food_name }}
+
+                        </td>
+
+                        <td>
+
+                            {{ booking.food.donor.organization_name }}
+
+                        </td>
+
+                        <td>
+
+                            {{ booking.ngo.organization_name }}
+
+                        </td>
+
+                        <td>
+
+                            <span class="badge bg-info">
+
+                                {{ booking.booking_status }}
+
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            {{ booking.booking_time or "-" }}
+
+                        </td>
+
+                        <td>
+
+                            {{ booking.pickup_time or "-" }}
+
+                        </td>
+
+                        <td>
+
+                            {{ booking.completed_time or "-" }}
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block title %}
+Available Food
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- Header -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+
+                <i class="bi bi-basket-fill text-success"></i>
+
+                Available Food Donations
+
+            </h2>
+
+            <p class="text-muted">
+
+                Browse food donations available for booking.
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="row g-4">
+
+        {% for donation in food %}
+
+        <div class="col-lg-4 col-md-6">
+
+            <div class="card donation-card h-100">
+
+                <!-- Food Image -->
+
+                {% if donation.image %}
+
+                <img
+                    src="{{ url_for('static', filename='uploads/food/food/food/' + donation.image) }}"
+                    class="card-img-top"
+                    style="height:220px;object-fit:cover;">
+
+                {% else %}
+
+                <img
+                    src="https://placehold.co/600x350?text=Food+Donation"
+                    class="card-img-top"
+                    style="height:220px;object-fit:cover;">
+
+                {% endif %}
+
+                <div class="card-body">
+
+                    <!-- Food Name -->
+
+                    <h4 class="fw-bold mb-1">
+
+                        {{ donation.food_name }}
+
+                    </h4>
+
+                    <!-- Organization Name -->
+
+                    <p class="mb-3 text-success fw-semibold">
+
+                        <i class="bi bi-building-fill"></i>
+
+                        {{ donation.donor.organization_name }}
+
+                    </p>
+
+                    <div class="d-flex justify-content-between mb-3">
+
+                        <span class="badge bg-success">
+
+                            {{ donation.status }}
+
+                        </span>
+
+                        <span class="badge bg-secondary">
+
+                            {{ donation.veg_nonveg }}
+
+                        </span>
+
+                    </div>
+
+                    <hr>
+
+                    <p>
+
+                        <i class="bi bi-box-fill text-success"></i>
+
+                        <strong>Quantity:</strong>
+
+                        {{ donation.quantity }}
+
+                    </p>
+
+                    <p>
+
+                        <i class="bi bi-grid-fill text-primary"></i>
+
+                        <strong>Category:</strong>
+
+                        {{ donation.category }}
+
+                    </p>
+
+                    <p>
+
+                        <i class="bi bi-clock-fill text-danger"></i>
+
+                        <strong>Expiry:</strong>
+
+                        {{ donation.expiry_time }}
+
+                    </p>
+
+                </div>
+
+                <div class="card-footer bg-white border-0">
+
+                    <a
+                        href="{{ url_for('ngo.food_details', food_id=donation.id) }}"="{{ url_for('ngo.food_details', food_id=donation.id) }}"="#"
+                        class="btn btn-success w-100 rounded-pill">
+
+                        <i class="bi bi-eye-fill"></i>
+
+                        View Details
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% else %}
+
+        <div class="col-12">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body text-center py-5">
+
+                    <i class="bi bi-basket display-1 text-success"></i>
+
+                    <h3 class="mt-3">
+
+                        No Food Donations Available
+
+                    </h3>
+
+                    <p class="text-muted">
+
+                        There are currently no food donations available for booking.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

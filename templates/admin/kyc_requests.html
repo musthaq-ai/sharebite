@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+
+{% block title %}
+KYC Verification
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+
+                <i class="bi bi-person-vcard-fill text-primary"></i>
+
+                KYC Verification
+
+            </h2>
+
+            <p class="text-muted">
+
+                Verify donor and NGO identity documents.
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="row g-4">
+
+        {% for kyc in requests %}
+
+        <div class="col-lg-4">
+
+            <div class="card shadow h-100">
+
+                <div class="card-body">
+
+                    <h4 class="fw-bold">
+
+                        {{ kyc.user.organization_name }}
+
+                    </h4>
+
+                    <hr>
+
+                    <p>
+
+                        <strong>Role:</strong>
+
+                        {{ kyc.user.role }}
+
+                    </p>
+
+                    <p>
+
+                        <strong>Status:</strong>
+
+                        {% if kyc.status == "Pending" %}
+
+                        <span class="badge bg-warning text-dark">
+
+                            Pending
+
+                        </span>
+
+                        {% elif kyc.status == "Approved" %}
+
+                        <span class="badge bg-success">
+
+                            Approved
+
+                        </span>
+
+                        {% else %}
+
+                        <span class="badge bg-danger">
+
+                            Rejected
+
+                        </span>
+
+                        {% endif %}
+
+                    </p>
+
+                    <p>
+
+                        <strong>Document:</strong>
+
+                    </p>
+
+                    <a
+                        href="{{ url_for('static', filename='uploads/' + kyc.document_path) }}"
+                        target="_blank"
+                        class="btn btn-outline-primary btn-sm">
+
+                        <i class="bi bi-file-earmark"></i>
+
+                        View Document
+
+                    </a>
+
+                </div>
+
+                <div class="card-footer bg-white">
+
+                    {% if kyc.status == "Pending" %}
+
+                    <form
+                        method="POST"
+                        action="{{ url_for('admin.approve_kyc_route', kyc_id=kyc.id) }}">
+
+                        <button
+                            class="btn btn-success w-100 mb-2">
+
+                            <i class="bi bi-check-circle-fill"></i>
+
+                            Approve
+
+                        </button>
+
+                    </form>
+
+                    <button
+                        class="btn btn-danger w-100"
+                        data-bs-toggle="modal"
+                        data-bs-target="#reject{{ kyc.id }}">
+
+                        Reject
+
+                    </button>
+
+                    {% else %}
+
+                    <div class="text-center">
+
+                        <span class="badge bg-secondary">
+
+                            Already Reviewed
+
+                        </span>
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Reject Modal -->
+
+        <div
+            class="modal fade"
+            id="reject{{ kyc.id }}"
+            tabindex="-1">
+
+            <div class="modal-dialog">
+
+                <div class="modal-content">
+
+                    <form
+                        method="POST"
+                        action="{{ url_for('admin.reject_kyc_route', kyc_id=kyc.id) }}">
+
+                        <div class="modal-header">
+
+                            <h5>
+
+                                Reject KYC
+
+                            </h5>
+
+                        </div>
+
+                        <div class="modal-body">
+
+                            <label>
+
+                                Reason
+
+                            </label>
+
+                            <textarea
+                                class="form-control"
+                                name="reason"
+                                rows="4"
+                                required></textarea>
+
+                        </div>
+
+                        <div class="modal-footer">
+
+                            <button
+                                class="btn btn-secondary"
+                                data-bs-dismiss="modal"
+                                type="button">
+
+                                Cancel
+
+                            </button>
+
+                            <button
+                                class="btn btn-danger">
+
+                                Reject
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% else %}
+
+        <div class="col-12">
+
+            <div class="alert alert-success">
+
+                🎉 No pending KYC requests.
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

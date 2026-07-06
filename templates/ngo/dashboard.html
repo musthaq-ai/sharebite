@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}
+NGO Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <h2 class="fw-bold mb-4">
+
+        🏢 NGO Dashboard
+
+    </h2>
+
+    <div class="row g-4">
+
+        <div class="col-lg-3">
+
+            <div class="card stat-card">
+
+                <div class="card-body">
+
+                    <h6>Total Bookings</h6>
+
+                    <h2>{{ total_bookings }}</h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3">
+
+            <div class="card stat-card">
+
+                <div class="card-body">
+
+                    <h6>Pending</h6>
+
+                    <h2>{{ pending_bookings }}</h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3">
+
+            <div class="card stat-card">
+
+                <div class="card-body">
+
+                    <h6>Accepted</h6>
+
+                    <h2>{{ accepted_bookings }}</h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3">
+
+            <div class="card stat-card">
+
+                <div class="card-body">
+
+                    <h6>Available Food</h6>
+
+                    <h2>{{ available_food }}</h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+{% block page_scripts %}
+
+<script src="{{ url_for('static', filename='js/current_location.js') }}"></script>
+
+{% endblock %}
