@@ -384,7 +384,62 @@ function reverseGeocode(lat, lng, saveToLocalStorage = false) {
             if (status === "OK" && results[0]) {
 
                 const address = results[0].formatted_address;
+// =========================================
+// Extract Area, City, State and Country
+// =========================================
+// =========================================
+// Extract Area, City, State, Country
+// =========================================
 
+let area = "";
+let city = "";
+let state = "";
+let country = "";
+
+results[0].address_components.forEach(component => {
+
+    const types = component.types;
+
+    // Area / Locality
+    if (
+        types.includes("sublocality") ||
+        types.includes("sublocality_level_1") ||
+        types.includes("neighborhood")
+    ) {
+
+        area = component.long_name;
+
+    }
+
+    // City
+    if (
+        types.includes("locality") ||
+        types.includes("administrative_area_level_2")
+    ) {
+
+        if (city === "") {
+
+            city = component.long_name;
+
+        }
+
+    }
+
+    // State
+    if (types.includes("administrative_area_level_1")) {
+
+        state = component.long_name;
+
+    }
+
+    // Country
+    if (types.includes("country")) {
+
+        country = component.long_name;
+
+    }
+
+});
                 // ------------------------------------
                 // Hidden Address (Submitted to Flask)
                 // ------------------------------------
@@ -397,7 +452,38 @@ function reverseGeocode(lat, lng, saveToLocalStorage = false) {
                     hiddenAddress.value = address;
 
                 }
+// =========================================
+// Hidden Location Fields
+// =========================================
 
+const areaInput = document.getElementById("areaName");
+const cityInput = document.getElementById("cityName");
+const stateInput = document.getElementById("stateName");
+const countryInput = document.getElementById("countryName");
+
+if(areaInput){
+
+    areaInput.value = area;
+
+}
+
+if(cityInput){
+
+    cityInput.value = city;
+
+}
+
+if(stateInput){
+
+    stateInput.value = state;
+
+}
+
+if(countryInput){
+
+    countryInput.value = country;
+
+}
                 // ------------------------------------
                 // Display Address
                 // ------------------------------------
@@ -444,23 +530,28 @@ function reverseGeocode(lat, lng, saveToLocalStorage = false) {
 
                     }
 
-                    localStorage.setItem(
+                   localStorage.setItem(
+    "userLocation",
+    JSON.stringify({
 
-                        "userLocation",
+        name: locationName,
 
-                        JSON.stringify({
+        address: address,
 
-                            name: locationName,
+        area: area,
 
-                            address: address,
+        city: city,
 
-                            lat: lat,
+        state: state,
 
-                            lng: lng
+        country: country,
 
-                        })
+        lat: lat,
 
-                    );
+        lng: lng
+
+    })
+);
 
                     // ------------------------------------
                     // Update Navbar Immediately

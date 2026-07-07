@@ -191,37 +191,49 @@ def save_food(form, files, donor_id):
 
     donation = FoodDonation(
 
-        donor_id=donor_id,
+    donor_id=donor_id,
 
-       food_name=form.getlist("food_name[]")[0],
+    food_name=form.getlist("food_name[]")[0],
 
-quantity=form.getlist("quantity[]")[0],
+    quantity=form.getlist("quantity[]")[0],
 
-category=form.getlist("category[]")[0],
+    category=form.getlist("category[]")[0],
 
-veg_nonveg=form.getlist("veg_nonveg[]")[0],
+    veg_nonveg=form.getlist("veg_nonveg[]")[0],
 
-        prepared_time=form["prepared_time"],
+    prepared_time=form.get("prepared_time"),
 
-        expiry_time=form["expiry_time"],
+    expiry_time=form.get("expiry_time"),
 
-        description=form.getlist("description[]")[0],
+    description=form.getlist("description[]")[0],
 
-        image=filename,
+    image=filename,
 
-        pickup_address=form["pickup_address"],
+    pickup_address=form.get("pickup_address"),
 
-        latitude=form["latitude"],
+    area_name=form.get("area_name"),
 
-        longitude=form["longitude"],
+    city=form.get("city"),
 
-        status="Available"
+    state=form.get("state"),
 
-    )
+    country=form.get("country"),
 
+    latitude=form.get("latitude"),
+
+    longitude=form.get("longitude"),
+
+    status="Available"
+
+)
     db.session.add(donation)
     db.session.commit()
-
+    print("----------------------------")
+    print(donation.area_name)
+    print(donation.city)
+    print(donation.state)
+    print(donation.country)
+    print("----------------------------")
 # =====================================================
 # GET SINGLE DONATION
 # =====================================================

@@ -1,5 +1,8 @@
-from datetime import datetime
 
+from datetime import datetime
+from flask import session
+
+import math
 from models import db
 from models.booking import Booking
 from models.donation import FoodDonation
@@ -60,25 +63,139 @@ def get_dashboard_data(ngo_id):
 
     }
 
+# ==========================================
+# DISTANCE CALCULATION (HAVERSINE)
+# ==========================================
 
+def calculate_distance(lat1, lon1, lat2, lon2):
+
+    R = 6371  # Earth radius in KM
+
+    lat1 = math.radians(float(lat1))
+    lon1 = math.radians(float(lon1))
+    lat2 = math.radians(float(lat2))
+    lon2 = math.radians(float(lon2))
+
+    dlat = lat2 - lat1
+    dlon = lon2 - lon1
+
+    a = (
+        math.sin(dlat / 2) ** 2
+        + math.cos(lat1)
+        * math.cos(lat2)
+        * math.sin(dlon / 2) ** 2
+    )
+
+    c = 2 * math.atan2(
+        math.sqrt(a),
+        math.sqrt(1 - a)
+    )
+
+    return R * c
 # ==========================================
 # AVAILABLE FOOD
+# ==========================================
+# ==========================================
+# AVAILABLE FOOD (Nearby First)
+# ==========================================
+# ==========================================
+# AVAILABLE FOOD (Smart Radius Search)
 # ==========================================
 
 def get_available_food():
 
-    return (
+    ngo_lat = session.get("current_latitude")
+    ngo_lng = session.get("current_longitude")
 
-        FoodDonation.query
+    foods = FoodDonation.query.filter_by(
+        status="Available"
+    ).all()
 
-        .filter_by(status="Available")
+    if not ngo_lat or not ngo_lng:
 
-        .order_by(FoodDonation.id.desc())
+        return foods
 
-        .all()
+    # Search radius levels (KM)
+    radius_levels = [5, 10, 20]
+
+    for radius in radius_levels:
+
+        nearby_food = []
+
+        for food in foods:
+
+            if food.latitude is None or food.longitude is None:
+
+                continue
+
+            distance = calculate_distance(
+
+                ngo_lat,
+
+                ngo_lng,
+
+                food.latitude,
+
+                food.longitude
+
+            )
+
+            food.distance = round(distance, 2)
+
+            if distance <= radius:
+
+                nearby_food.append(food)
+
+        if nearby_food:
+
+            nearby_food.sort(
+
+                key=lambda x: x.distance
+
+            )
+
+            print(f"Nearby food found within {radius} KM")
+
+            return nearby_food
+
+    # -----------------------------------
+    # No food inside 20 KM
+    # Return all foods sorted by distance
+    # -----------------------------------
+
+    for food in foods:
+
+        if food.latitude is None or food.longitude is None:
+
+            continue
+
+        food.distance = round(
+
+            calculate_distance(
+
+                ngo_lat,
+
+                ngo_lng,
+
+                food.latitude,
+
+                food.longitude
+
+            ),
+
+            2
+
+        )
+
+    foods.sort(
+
+        key=lambda x: x.distance
 
     )
 
+    print("No nearby food. Showing all.")
+
+    return foods
 
 # ==========================================
 # GET FOOD DETAILS

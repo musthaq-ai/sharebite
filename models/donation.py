@@ -30,6 +30,21 @@ class FoodDonation(db.Model):
     image = db.Column(db.String(255))
 
     pickup_address = db.Column(db.Text)
+    area_name = db.Column(
+    db.String(150)
+)
+
+    city = db.Column(
+    db.String(150)
+)
+
+    state = db.Column(
+    db.String(150)
+)
+
+    country = db.Column(
+    db.String(150)
+)
 
     latitude = db.Column(db.Numeric(10, 8))
 

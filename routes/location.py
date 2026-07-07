@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, current_app
+from flask import Blueprint, request, jsonify, current_app, session
 import requests
 
 location = Blueprint("location", __name__)
@@ -74,5 +74,20 @@ def get_location():
         "success": True,
 
         "location": location_name
+
+    })
+    
+@location.route("/set-current-location", methods=["POST"])
+def set_current_location():
+
+    data = request.get_json()
+
+    session["current_location"] = data.get("location")
+    session["current_latitude"] = data.get("latitude")
+    session["current_longitude"] = data.get("longitude")
+
+    return jsonify({
+
+        "success": True
 
     })

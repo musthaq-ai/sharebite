@@ -512,7 +512,29 @@
     id="formattedAddress"
     name="pickup_address"
     value="{{ donation.pickup_address if donation else '' }}">
-        <!-- Display -->
+        <input
+    type="hidden"
+    id="areaName"
+    name="area_name"
+    value="{{ donation.area_name if donation else '' }}">
+
+<input
+    type="hidden"
+    id="cityName"
+    name="city"
+    value="{{ donation.city if donation else '' }}">
+
+<input
+    type="hidden"
+    id="stateName"
+    name="state"
+    value="{{ donation.state if donation else '' }}">
+
+<input
+    type="hidden"
+    id="countryName"
+    name="country"
+    value="{{ donation.country if donation else '' }}"><!-- Display -->
 
         <div class="row mt-4 g-3">
 

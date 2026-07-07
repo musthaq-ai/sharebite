@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    const locationText = document.getElementById("currentLocation");
+    const locationElements = document.querySelectorAll(".currentLocation");
 
-    if (!locationText) return;
+    if (locationElements.length === 0) return;
 
     // ==========================================
     // Check if location is already saved
@@ -16,15 +16,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const location = JSON.parse(savedLocation);
 
-            locationText.innerHTML =
-                `<i class="bi bi-geo-alt-fill"></i> ${location.name}`;
+            locationElements.forEach(el => {
+
+                el.innerHTML =
+                    `<i class="bi bi-geo-alt-fill"></i> ${location.name}`;
+
+            });
 
             console.log("Using saved location:", location.name);
 
-            // Stop here.
             return;
 
-        } catch (e) {
+        }
+
+        catch (e) {
 
             localStorage.removeItem("userLocation");
 
@@ -38,13 +43,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!navigator.geolocation) {
 
-        locationText.innerText = "Location not supported";
+        locationElements.forEach(el => {
+
+            el.innerText = "Location not supported";
+
+        });
 
         return;
 
     }
 
-    locationText.innerText = "Getting location...";
+    locationElements.forEach(el => {
+
+        el.innerText = "Getting location...";
+
+    });
 
     // ==========================================
     // Get Current GPS Location
@@ -73,6 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 body: JSON.stringify({
 
                     latitude: latitude,
+
                     longitude: longitude
 
                 })
@@ -87,8 +101,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 if (data.success) {
 
-                    locationText.innerHTML =
-                        `<i class="bi bi-geo-alt-fill"></i> ${data.location}`;
+                    locationElements.forEach(el => {
+
+                        el.innerHTML =
+                            `<i class="bi bi-geo-alt-fill"></i> ${data.location}`;
+
+                    });
 
                     // ==========================================
                     // Save Location
@@ -110,11 +128,55 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     );
 
+                    // ==========================================
+                    // Save Current Location to Flask Session
+                    // ==========================================
+
+                    fetch("/set-current-location", {
+
+                        method: "POST",
+
+                        headers: {
+
+                            "Content-Type": "application/json"
+
+                        },
+
+                        body: JSON.stringify({
+
+                            location: data.location,
+
+                            latitude: latitude,
+
+                            longitude: longitude
+
+                        })
+
+                    })
+
+                    .then(res => res.json())
+
+                    .then(() => {
+
+                        console.log("Current location saved in session.");
+
+                    })
+
+                    .catch(err => {
+
+                        console.error(err);
+
+                    });
+
                 }
 
                 else {
 
-                    locationText.innerText = "Unknown Location";
+                    locationElements.forEach(el => {
+
+                        el.innerText = "Unknown Location";
+
+                    });
 
                 }
 
@@ -124,7 +186,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 console.error(error);
 
-                locationText.innerText = "Unable to fetch location";
+                locationElements.forEach(el => {
+
+                    el.innerText = "Unable to fetch location";
+
+                });
 
             });
 
@@ -132,35 +198,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
         function(error) {
 
+            let message = "Unable to fetch location";
+
             switch(error.code){
 
                 case error.PERMISSION_DENIED:
 
-                    locationText.innerText = "Permission Denied";
+                    message = "Permission Denied";
                     break;
 
                 case error.POSITION_UNAVAILABLE:
 
-                    locationText.innerText = "Location Unavailable";
+                    message = "Location Unavailable";
                     break;
 
                 case error.TIMEOUT:
 
-                    locationText.innerText = "Request Timed Out";
+                    message = "Request Timed Out";
                     break;
 
-                default:
-
-                    locationText.innerText = "Unable to fetch location";
-
             }
+
+            locationElements.forEach(el => {
+
+                el.innerText = message;
+
+            });
 
         },
 
         {
 
             enableHighAccuracy: true,
+
             timeout: 10000,
+
             maximumAge: 0
 
         }

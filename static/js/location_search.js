@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log("Longitude:", longitude);
 
             // Update navbar
-            const navbarLocation = document.getElementById("currentLocation");
+            const navbarLocation = document.querySelectorAll(".currentLocation");
 
             if (navbarLocation) {
 
@@ -72,7 +72,11 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             // Save for future use
-            localStorage.setItem("userLocation", JSON.stringify({
+            // =====================================
+// Save Location in Local Storage
+// =====================================
+
+const userLocation = {
 
     name: locationName,
 
@@ -82,7 +86,58 @@ document.addEventListener("DOMContentLoaded", () => {
 
     lng: longitude
 
-}));
+};
+
+localStorage.setItem(
+
+    "userLocation",
+
+    JSON.stringify(userLocation)
+
+);
+
+// =====================================
+// Save Location in Flask Session
+// =====================================
+
+fetch("/set-current-location", {
+
+    method: "POST",
+
+    headers: {
+
+        "Content-Type": "application/json"
+
+    },
+
+    body: JSON.stringify({
+
+        location: locationName,
+
+        latitude: latitude,
+
+        longitude: longitude
+
+    })
+
+})
+
+.then(res => res.json())
+
+.then(data => {
+
+    console.log("Session Location Saved:", data);
+
+    // Reload current page to use new location
+    window.location.reload();
+
+})
+
+.catch(err => {
+
+    console.error(err);
+
+});
 
             // Clear search box
             input.value = "";
