@@ -2,157 +2,350 @@ let autocomplete;
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    const modalElement = document.getElementById("locationModal");
-    const input = document.getElementById("locationSearch");
+    const modalElement =
+        document.getElementById("locationModal");
+
+    const input =
+        document.getElementById("locationSearch");
+
 
     if (!modalElement || !input) return;
 
-    modalElement.addEventListener("shown.bs.modal", () => {
 
-        // Prevent creating multiple autocomplete instances
-        if (autocomplete) return;
+    // =====================================================
+    // Initialize Google Places Autocomplete
+    // =====================================================
 
-        autocomplete = new google.maps.places.Autocomplete(input, {
+    modalElement.addEventListener(
+        "shown.bs.modal",
+        () => {
 
-            fields: [
-                "geometry",
-                "formatted_address",
-                "name",
-                "address_components"
-            ],
+            // Prevent duplicate autocomplete instances
+            if (autocomplete) {
 
-            types: ["geocode"]
+                input.focus();
 
-        });
+                return;
 
-        autocomplete.addListener("place_changed", () => {
+            }
 
-            const place = autocomplete.getPlace();
 
-            if (!place.geometry) return;
+            if (
+                typeof google === "undefined" ||
+                !google.maps ||
+                !google.maps.places
+            ) {
 
-            const latitude = place.geometry.location.lat();
-            const longitude = place.geometry.location.lng();
+                console.error(
+                    "Google Places API is not loaded."
+                );
 
-            let locationName = place.name;
+                return;
 
-            // Prefer Area -> City -> Name
-            if (place.address_components) {
+            }
 
-                place.address_components.forEach(component => {
 
-                    if (component.types.includes("sublocality") ||
-                        component.types.includes("sublocality_level_1")) {
+            autocomplete =
+                new google.maps.places.Autocomplete(
 
-                        locationName = component.long_name;
+                    input,
+
+                    {
+
+                        fields: [
+
+                            "geometry",
+
+                            "formatted_address",
+
+                            "name",
+
+                            "address_components"
+
+                        ],
+
+                        types: ["geocode"]
 
                     }
-                    else if (component.types.includes("locality")) {
 
-                        locationName = component.long_name;
+                );
+
+
+            // =================================================
+            // Place selected
+            // =================================================
+
+            autocomplete.addListener(
+                "place_changed",
+                () => {
+
+                    const place =
+                        autocomplete.getPlace();
+
+
+                    if (
+                        !place.geometry ||
+                        !place.geometry.location
+                    ) {
+
+                        console.error(
+                            "Selected place has no geometry."
+                        );
+
+                        return;
 
                     }
 
-                });
 
-            }
+                    const latitude =
+                        place.geometry.location.lat();
 
-            console.log("Location :", locationName);
-            console.log("Latitude :", latitude);
-            console.log("Longitude:", longitude);
+                    const longitude =
+                        place.geometry.location.lng();
 
-            // Update navbar
-            const navbarLocation = document.querySelectorAll(".currentLocation");
 
-            if (navbarLocation) {
+                    let locationName =
+                        place.name ||
+                        place.formatted_address ||
+                        "Selected Location";
 
-                navbarLocation.innerHTML =
-                    `<i class="bi bi-geo-alt-fill"></i> ${locationName}`;
 
-            }
+                    let sublocality = null;
 
-            // Save for future use
-            // =====================================
-// Save Location in Local Storage
-// =====================================
+                    let locality = null;
 
-const userLocation = {
 
-    name: locationName,
+                    // =========================================
+                    // Extract Area and City
+                    // =========================================
 
-    address: place.formatted_address || locationName,
+                    if (place.address_components) {
 
-    lat: latitude,
+                        place.address_components.forEach(
+                            component => {
 
-    lng: longitude
+                                const types =
+                                    component.types;
 
-};
 
-localStorage.setItem(
+                                if (
 
-    "userLocation",
+                                    types.includes(
+                                        "sublocality"
+                                    ) ||
 
-    JSON.stringify(userLocation)
+                                    types.includes(
+                                        "sublocality_level_1"
+                                    )
 
-);
+                                ) {
 
-// =====================================
-// Save Location in Flask Session
-// =====================================
+                                    sublocality =
+                                        component.long_name;
 
-fetch("/set-current-location", {
+                                }
 
-    method: "POST",
 
-    headers: {
+                                if (
 
-        "Content-Type": "application/json"
+                                    types.includes(
+                                        "locality"
+                                    )
 
-    },
+                                ) {
 
-    body: JSON.stringify({
+                                    locality =
+                                        component.long_name;
 
-        location: locationName,
+                                }
 
-        latitude: latitude,
+                            }
 
-        longitude: longitude
+                        );
 
-    })
+                    }
 
-})
 
-.then(res => res.json())
+                    // Prefer Area -> City -> Place name
 
-.then(data => {
+                    if (sublocality) {
 
-    console.log("Session Location Saved:", data);
+                        locationName = sublocality;
 
-    // Reload current page to use new location
-    window.location.reload();
+                    }
 
-})
+                    else if (locality) {
 
-.catch(err => {
+                        locationName = locality;
 
-    console.error(err);
+                    }
 
-});
 
-            // Clear search box
-            input.value = "";
+                    console.log(
+                        "Location:",
+                        locationName
+                    );
 
-            // Close modal
-            const modal = bootstrap.Modal.getInstance(modalElement);
+                    console.log(
+                        "Latitude:",
+                        latitude
+                    );
 
-            if (modal) {
+                    console.log(
+                        "Longitude:",
+                        longitude
+                    );
 
-                modal.hide();
 
-            }
+                    // =========================================
+                    // Update ALL navbar location elements
+                    // =========================================
 
-        });
+                    const navbarLocations =
+                        document.querySelectorAll(
+                            ".currentLocation"
+                        );
 
-    });
+
+                    navbarLocations.forEach(element => {
+
+                        element.innerHTML =
+
+                            `<i class="bi bi-geo-alt-fill"></i> ${locationName}`;
+
+                    });
+
+
+                    // =========================================
+                    // Save to localStorage
+                    // =========================================
+
+                    const userLocation = {
+
+                        name: locationName,
+
+                        address:
+                            place.formatted_address ||
+                            locationName,
+
+                        lat: latitude,
+
+                        lng: longitude
+
+                    };
+
+
+                    localStorage.setItem(
+
+                        "userLocation",
+
+                        JSON.stringify(userLocation)
+
+                    );
+
+
+                    // =========================================
+                    // Save to Flask session
+                    // =========================================
+
+                    fetch("/set-current-location", {
+
+                        method: "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+                        body: JSON.stringify({
+
+                            location:
+                                locationName,
+
+                            latitude:
+                                latitude,
+
+                            longitude:
+                                longitude
+
+                        })
+
+                    })
+
+                    .then(response => {
+
+                        if (!response.ok) {
+
+                            throw new Error(
+                                "Unable to save selected location."
+                            );
+
+                        }
+
+                        return response.json();
+
+                    })
+
+                    .then(data => {
+
+                        console.log(
+
+                            "Session Location Saved:",
+
+                            data
+
+                        );
+
+
+                        // Clear input
+
+                        input.value = "";
+
+
+                        // Close modal
+
+                        const modal =
+                            bootstrap.Modal.getInstance(
+                                modalElement
+                            );
+
+
+                        if (modal) {
+
+                            modal.hide();
+
+                        }
+
+
+                        /*
+                         * Reload page so nearby food
+                         * results are recalculated.
+                         */
+
+                        window.location.reload();
+
+                    })
+
+                    .catch(error => {
+
+                        console.error(
+
+                            "Location save error:",
+
+                            error
+
+                        );
+
+                    });
+
+                }
+
+            );
+
+        }
+
+    );
 
 });

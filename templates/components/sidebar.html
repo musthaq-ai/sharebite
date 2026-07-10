@@ -1,7 +1,7 @@
 {% if session.get("role") == "Donor" %}
 
 <!-- ===========================
-Desktop Sidebar
+     DESKTOP SIDEBAR - DONOR
 =========================== -->
 
 <div class="col-lg-2 bg-dark min-vh-100 p-3 d-none d-lg-block sidebar">
@@ -12,87 +12,225 @@ Desktop Sidebar
 
     <div class="list-group">
 
-        <a href="{{ url_for('donor.dashboard') }}" class="list-group-item list-group-item-action">
-            <i class="bi bi-speedometer2"></i> Dashboard
+        <a href="{{ url_for('donor.dashboard') }}"
+           class="list-group-item list-group-item-action">
+            <i class="bi bi-speedometer2"></i>
+            Dashboard
         </a>
 
-        <a href="{{ url_for('donor.add_food') }}" class="list-group-item list-group-item-action">
-            <i class="bi bi-plus-circle"></i> Add Food
+        <a href="{{ url_for('donor.add_food') }}"
+           class="list-group-item list-group-item-action">
+            <i class="bi bi-plus-circle"></i>
+            Add Food
         </a>
 
-        <a href="{{ url_for('donor.my_donations') }}" class="list-group-item list-group-item-action">
-            <i class="bi bi-box-seam"></i> My Donations
+        <a href="{{ url_for('donor.my_donations') }}"
+           class="list-group-item list-group-item-action">
+            <i class="bi bi-box-seam"></i>
+            My Donations
         </a>
 
-        <a href="{{ url_for('donor.booking_requests') }}" class="list-group-item list-group-item-action">
-            <i class="bi bi-bell"></i> Booking Requests
+        <a href="{{ url_for('donor.booking_requests') }}"
+           class="list-group-item list-group-item-action">
+            <i class="bi bi-bell"></i>
+            Booking Requests
         </a>
 
-        <a href="{{ url_for('donor.scan_qr') }}" class="list-group-item list-group-item-action">
-            <i class="bi bi-qr-code-scan"></i> Scan NGO QR
+        <a href="{{ url_for('donor.scan_qr') }}"
+           class="list-group-item list-group-item-action">
+            <i class="bi bi-qr-code-scan"></i>
+            Scan NGO QR
         </a>
 
-        <a href="{{ url_for('kyc.upload') }}" class="list-group-item list-group-item-action">
-            <i class="bi bi-file-earmark-arrow-up-fill"></i> Upload KYC
+        <a href="{{ url_for('kyc.upload') }}"
+           class="list-group-item list-group-item-action">
+            <i class="bi bi-file-earmark-arrow-up-fill"></i>
+            Upload KYC
         </a>
 
     </div>
 
 </div>
 
+
 <!-- ===========================
-Mobile Sidebar
+     MOBILE SIDEBAR - DONOR
 =========================== -->
 
-<div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar">
+<div class="offcanvas offcanvas-start mobile-sidebar"
+     tabindex="-1"
+     id="mobileSidebar">
 
-    <div class="offcanvas-header">
+    <div class="mobile-sidebar-header">
 
-        <h5 class="offcanvas-title">
-            🏨 Donor Panel
-        </h5>
+        <div class="mobile-sidebar-brand">
 
-        <button class="btn-close" data-bs-dismiss="offcanvas"></button>
+            <div class="mobile-sidebar-logo">
+                <i class="bi bi-heart-fill"></i>
+            </div>
+
+            <div>
+                <h5>ShareBite</h5>
+                <span>Donor Panel</span>
+            </div>
+
+        </div>
+
+        <button type="button"
+                class="mobile-sidebar-close"
+                data-bs-dismiss="offcanvas"
+                aria-label="Close">
+
+            <i class="bi bi-x-lg"></i>
+
+        </button>
 
     </div>
 
-    <div class="offcanvas-body">
 
-        <div class="list-group">
+    <div class="mobile-user-card">
 
-            <a href="{{ url_for('donor.dashboard') }}" class="list-group-item list-group-item-action">
-                <i class="bi bi-speedometer2"></i> Dashboard
-            </a>
+        <div class="mobile-user-avatar">
 
-            <a href="{{ url_for('donor.add_food') }}" class="list-group-item list-group-item-action">
-                <i class="bi bi-plus-circle"></i> Add Food
-            </a>
+            <i class="bi bi-person-fill"></i>
 
-            <a href="{{ url_for('donor.my_donations') }}" class="list-group-item list-group-item-action">
-                <i class="bi bi-box-seam"></i> My Donations
-            </a>
+        </div>
 
-            <a href="{{ url_for('donor.booking_requests') }}" class="list-group-item list-group-item-action">
-                <i class="bi bi-bell"></i> Booking Requests
-            </a>
+        <div class="mobile-user-info">
 
-            <a href="{{ url_for('donor.scan_qr') }}" class="list-group-item list-group-item-action">
-                <i class="bi bi-qr-code-scan"></i> Scan NGO QR
-            </a>
+            <strong>
+                {{ session.get('user_name', 'Donor') }}
+            </strong>
 
-            <a href="{{ url_for('kyc.upload') }}" class="list-group-item list-group-item-action">
-                <i class="bi bi-file-earmark-arrow-up-fill"></i> Upload KYC
-            </a>
+            <span>
+                <i class="bi bi-patch-check-fill"></i>
+                Donor Account
+            </span>
 
         </div>
 
     </div>
 
+
+    <div class="offcanvas-body mobile-sidebar-body">
+
+        <p class="mobile-menu-label">
+            MAIN MENU
+        </p>
+
+        <nav class="mobile-nav">
+
+            <a href="{{ url_for('donor.dashboard') }}"
+               class="mobile-nav-link {% if request.endpoint == 'donor.dashboard' %}active{% endif %}">
+
+                <span class="mobile-nav-icon">
+                    <i class="bi bi-grid-fill"></i>
+                </span>
+
+                <span>Dashboard</span>
+
+                <i class="bi bi-chevron-right mobile-nav-arrow"></i>
+
+            </a>
+
+
+            <a href="{{ url_for('donor.add_food') }}"
+               class="mobile-nav-link {% if request.endpoint == 'donor.add_food' %}active{% endif %}">
+
+                <span class="mobile-nav-icon">
+                    <i class="bi bi-plus-circle-fill"></i>
+                </span>
+
+                <span>Add Food</span>
+
+                <i class="bi bi-chevron-right mobile-nav-arrow"></i>
+
+            </a>
+
+
+            <a href="{{ url_for('donor.my_donations') }}"
+               class="mobile-nav-link {% if request.endpoint == 'donor.my_donations' %}active{% endif %}">
+
+                <span class="mobile-nav-icon">
+                    <i class="bi bi-box-seam-fill"></i>
+                </span>
+
+                <span>My Donations</span>
+
+                <i class="bi bi-chevron-right mobile-nav-arrow"></i>
+
+            </a>
+
+
+            <a href="{{ url_for('donor.booking_requests') }}"
+               class="mobile-nav-link {% if request.endpoint == 'donor.booking_requests' %}active{% endif %}">
+
+                <span class="mobile-nav-icon">
+                    <i class="bi bi-bell-fill"></i>
+                </span>
+
+                <span>Booking Requests</span>
+
+                <i class="bi bi-chevron-right mobile-nav-arrow"></i>
+
+            </a>
+
+
+            <a href="{{ url_for('donor.scan_qr') }}"
+               class="mobile-nav-link {% if request.endpoint == 'donor.scan_qr' %}active{% endif %}">
+
+                <span class="mobile-nav-icon">
+                    <i class="bi bi-qr-code-scan"></i>
+                </span>
+
+                <span>Scan NGO QR</span>
+
+                <i class="bi bi-chevron-right mobile-nav-arrow"></i>
+
+            </a>
+
+
+            <a href="{{ url_for('kyc.upload') }}"
+               class="mobile-nav-link {% if request.endpoint == 'kyc.upload' %}active{% endif %}">
+
+                <span class="mobile-nav-icon">
+                    <i class="bi bi-person-vcard-fill"></i>
+                </span>
+
+                <span>Upload KYC</span>
+
+                <i class="bi bi-chevron-right mobile-nav-arrow"></i>
+
+            </a>
+
+        </nav>
+
+    </div>
+
+
+    <div class="mobile-sidebar-footer">
+
+        <a href="{{ url_for('auth.logout') }}"
+           class="mobile-logout-btn"
+           onclick="localStorage.removeItem('userLocation');">
+
+            <i class="bi bi-box-arrow-right"></i>
+
+            <span>Logout</span>
+
+        </a>
+
+    </div>
+
 </div>
+
 
 {% elif session.get("role") == "NGO" %}
 
-<!-- Desktop -->
+
+<!-- ===========================
+     DESKTOP SIDEBAR - NGO
+=========================== -->
 
 <div class="col-lg-2 bg-dark min-vh-100 p-3 d-none d-lg-block sidebar">
 
@@ -102,69 +240,183 @@ Mobile Sidebar
 
     <div class="list-group">
 
-        <a href="{{ url_for('ngo.dashboard') }}" class="list-group-item list-group-item-action">
-            <i class="bi bi-speedometer2"></i> Dashboard
+        <a href="{{ url_for('ngo.dashboard') }}"
+           class="list-group-item list-group-item-action">
+            <i class="bi bi-speedometer2"></i>
+            Dashboard
         </a>
 
-        <a href="{{ url_for('ngo.available_food') }}" class="list-group-item list-group-item-action">
-            <i class="bi bi-box2-heart"></i> Available Food
+        <a href="{{ url_for('ngo.available_food') }}"
+           class="list-group-item list-group-item-action">
+            <i class="bi bi-box2-heart"></i>
+            Available Food
         </a>
 
-        <a href="{{ url_for('ngo.my_bookings') }}" class="list-group-item list-group-item-action">
-            <i class="bi bi-bookmark-check"></i> My Bookings
+        <a href="{{ url_for('ngo.my_bookings') }}"
+           class="list-group-item list-group-item-action">
+            <i class="bi bi-bookmark-check"></i>
+            My Bookings
         </a>
 
-        <a href="{{ url_for('kyc.upload') }}" class="list-group-item list-group-item-action">
-            <i class="bi bi-file-earmark-arrow-up-fill"></i> Upload KYC
+        <a href="{{ url_for('kyc.upload') }}"
+           class="list-group-item list-group-item-action">
+            <i class="bi bi-file-earmark-arrow-up-fill"></i>
+            Upload KYC
         </a>
 
     </div>
 
 </div>
 
-<!-- Mobile -->
 
-<div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar">
+<!-- ===========================
+     MOBILE SIDEBAR - NGO
+=========================== -->
 
-    <div class="offcanvas-header">
+<div class="offcanvas offcanvas-start mobile-sidebar"
+     tabindex="-1"
+     id="mobileSidebar">
 
-        <h5 class="offcanvas-title">
-            🏢 NGO Panel
-        </h5>
+    <div class="mobile-sidebar-header">
 
-        <button class="btn-close" data-bs-dismiss="offcanvas"></button>
+        <div class="mobile-sidebar-brand">
+
+            <div class="mobile-sidebar-logo">
+                <i class="bi bi-heart-fill"></i>
+            </div>
+
+            <div>
+                <h5>ShareBite</h5>
+                <span>NGO Panel</span>
+            </div>
+
+        </div>
+
+        <button type="button"
+                class="mobile-sidebar-close"
+                data-bs-dismiss="offcanvas"
+                aria-label="Close">
+
+            <i class="bi bi-x-lg"></i>
+
+        </button>
 
     </div>
 
-    <div class="offcanvas-body">
 
-        <div class="list-group">
+    <div class="mobile-user-card">
 
-            <a href="{{ url_for('ngo.dashboard') }}" class="list-group-item list-group-item-action">
-                <i class="bi bi-speedometer2"></i> Dashboard
-            </a>
+        <div class="mobile-user-avatar">
+            <i class="bi bi-building-fill"></i>
+        </div>
 
-            <a href="{{ url_for('ngo.available_food') }}" class="list-group-item list-group-item-action">
-                <i class="bi bi-box2-heart"></i> Available Food
-            </a>
+        <div class="mobile-user-info">
 
-            <a href="{{ url_for('ngo.my_bookings') }}" class="list-group-item list-group-item-action">
-                <i class="bi bi-bookmark-check"></i> My Bookings
-            </a>
+            <strong>
+                {{ session.get('user_name', 'NGO') }}
+            </strong>
 
-            <a href="{{ url_for('kyc.upload') }}" class="list-group-item list-group-item-action">
-                <i class="bi bi-file-earmark-arrow-up-fill"></i> Upload KYC
-            </a>
+            <span>
+                <i class="bi bi-patch-check-fill"></i>
+                NGO Account
+            </span>
 
         </div>
 
     </div>
 
+
+    <div class="offcanvas-body mobile-sidebar-body">
+
+        <p class="mobile-menu-label">
+            MAIN MENU
+        </p>
+
+        <nav class="mobile-nav">
+
+            <a href="{{ url_for('ngo.dashboard') }}"
+               class="mobile-nav-link {% if request.endpoint == 'ngo.dashboard' %}active{% endif %}">
+
+                <span class="mobile-nav-icon">
+                    <i class="bi bi-grid-fill"></i>
+                </span>
+
+                <span>Dashboard</span>
+
+                <i class="bi bi-chevron-right mobile-nav-arrow"></i>
+
+            </a>
+
+
+            <a href="{{ url_for('ngo.available_food') }}"
+               class="mobile-nav-link {% if request.endpoint == 'ngo.available_food' %}active{% endif %}">
+
+                <span class="mobile-nav-icon">
+                    <i class="bi bi-box2-heart-fill"></i>
+                </span>
+
+                <span>Available Food</span>
+
+                <i class="bi bi-chevron-right mobile-nav-arrow"></i>
+
+            </a>
+
+
+            <a href="{{ url_for('ngo.my_bookings') }}"
+               class="mobile-nav-link {% if request.endpoint == 'ngo.my_bookings' %}active{% endif %}">
+
+                <span class="mobile-nav-icon">
+                    <i class="bi bi-bookmark-check-fill"></i>
+                </span>
+
+                <span>My Bookings</span>
+
+                <i class="bi bi-chevron-right mobile-nav-arrow"></i>
+
+            </a>
+
+
+            <a href="{{ url_for('kyc.upload') }}"
+               class="mobile-nav-link {% if request.endpoint == 'kyc.upload' %}active{% endif %}">
+
+                <span class="mobile-nav-icon">
+                    <i class="bi bi-person-vcard-fill"></i>
+                </span>
+
+                <span>Upload KYC</span>
+
+                <i class="bi bi-chevron-right mobile-nav-arrow"></i>
+
+            </a>
+
+        </nav>
+
+    </div>
+
+
+    <div class="mobile-sidebar-footer">
+
+        <a href="{{ url_for('auth.logout') }}"
+           class="mobile-logout-btn"
+           onclick="localStorage.removeItem('userLocation');">
+
+            <i class="bi bi-box-arrow-right"></i>
+
+            <span>Logout</span>
+
+        </a>
+
+    </div>
+
 </div>
+
 
 {% elif session.get("role") == "Admin" %}
 
-<!-- Desktop -->
+
+<!-- ===========================
+     DESKTOP SIDEBAR - ADMIN
+=========================== -->
 
 <div class="col-lg-2 bg-dark min-vh-100 p-3 d-none d-lg-block sidebar">
 
@@ -174,73 +426,191 @@ Mobile Sidebar
 
     <div class="list-group">
 
-        <a href="{{ url_for('admin.dashboard') }}" class="list-group-item list-group-item-action">
-            <i class="bi bi-speedometer2"></i> Dashboard
+        <a href="{{ url_for('admin.dashboard') }}"
+           class="list-group-item list-group-item-action">
+            <i class="bi bi-speedometer2"></i>
+            Dashboard
         </a>
 
-        <a href="{{ url_for('admin.users') }}" class="list-group-item list-group-item-action">
-            <i class="bi bi-people-fill"></i> Manage Users
+        <a href="{{ url_for('admin.users') }}"
+           class="list-group-item list-group-item-action">
+            <i class="bi bi-people-fill"></i>
+            Manage Users
         </a>
 
-        <a href="{{ url_for('admin.donations') }}" class="list-group-item list-group-item-action">
-            <i class="bi bi-box2-heart"></i> Manage Donations
+        <a href="{{ url_for('admin.donations') }}"
+           class="list-group-item list-group-item-action">
+            <i class="bi bi-box2-heart"></i>
+            Manage Donations
         </a>
 
-        <a href="{{ url_for('admin.bookings') }}" class="list-group-item list-group-item-action">
-            <i class="bi bi-bookmark-check-fill"></i> Manage Bookings
+        <a href="{{ url_for('admin.bookings') }}"
+           class="list-group-item list-group-item-action">
+            <i class="bi bi-bookmark-check-fill"></i>
+            Manage Bookings
         </a>
 
-        <a href="{{ url_for('admin.kyc_requests') }}" class="list-group-item list-group-item-action">
-            <i class="bi bi-person-vcard-fill"></i> KYC Verification
+        <a href="{{ url_for('admin.kyc_requests') }}"
+           class="list-group-item list-group-item-action">
+            <i class="bi bi-person-vcard-fill"></i>
+            KYC Verification
         </a>
 
     </div>
 
 </div>
 
-<!-- Mobile -->
 
-<div
-class="offcanvas offcanvas-start"
-tabindex="-1"
-id="mobileSidebar"
-style="z-index:1090;">
+<!-- ===========================
+     MOBILE SIDEBAR - ADMIN
+=========================== -->
 
-    <div class="offcanvas-header">
+<div class="offcanvas offcanvas-start mobile-sidebar"
+     tabindex="-1"
+     id="mobileSidebar">
 
-        <h5 class="offcanvas-title">
-            🛡️ Admin Panel
-        </h5>
+    <div class="mobile-sidebar-header">
 
-        <button class="btn-close" data-bs-dismiss="offcanvas"></button>
+        <div class="mobile-sidebar-brand">
+
+            <div class="mobile-sidebar-logo">
+                <i class="bi bi-shield-check"></i>
+            </div>
+
+            <div>
+                <h5>ShareBite</h5>
+                <span>Admin Panel</span>
+            </div>
+
+        </div>
+
+        <button type="button"
+                class="mobile-sidebar-close"
+                data-bs-dismiss="offcanvas"
+                aria-label="Close">
+
+            <i class="bi bi-x-lg"></i>
+
+        </button>
 
     </div>
 
-    <div class="offcanvas-body">
 
-        <div class="list-group">
+    <div class="mobile-user-card">
 
-            <a href="{{ url_for('admin.dashboard') }}" class="list-group-item list-group-item-action">
-                <i class="bi bi-speedometer2"></i> Dashboard
-            </a>
+        <div class="mobile-user-avatar">
+            <i class="bi bi-person-fill-gear"></i>
+        </div>
 
-            <a href="{{ url_for('admin.users') }}" class="list-group-item list-group-item-action">
-                <i class="bi bi-people-fill"></i> Manage Users
-            </a>
+        <div class="mobile-user-info">
 
-            <a href="{{ url_for('admin.donations') }}" class="list-group-item list-group-item-action">
-                <i class="bi bi-box2-heart"></i> Manage Donations
-            </a>
+            <strong>
+                {{ session.get('user_name', 'Admin') }}
+            </strong>
 
-            <a href="{{ url_for('admin.bookings') }}" class="list-group-item list-group-item-action">
-                <i class="bi bi-bookmark-check-fill"></i> Manage Bookings
-            </a>
-
-            <a href="{{ url_for('admin.kyc_requests') }}" class="list-group-item list-group-item-action">
-                <i class="bi bi-person-vcard-fill"></i> KYC Verification
-            </a>
+            <span>
+                <i class="bi bi-shield-check"></i>
+                Administrator
+            </span>
 
         </div>
+
+    </div>
+
+
+    <div class="offcanvas-body mobile-sidebar-body">
+
+        <p class="mobile-menu-label">
+            MAIN MENU
+        </p>
+
+        <nav class="mobile-nav">
+
+            <a href="{{ url_for('admin.dashboard') }}"
+               class="mobile-nav-link {% if request.endpoint == 'admin.dashboard' %}active{% endif %}">
+
+                <span class="mobile-nav-icon">
+                    <i class="bi bi-grid-fill"></i>
+                </span>
+
+                <span>Dashboard</span>
+
+                <i class="bi bi-chevron-right mobile-nav-arrow"></i>
+
+            </a>
+
+
+            <a href="{{ url_for('admin.users') }}"
+               class="mobile-nav-link {% if request.endpoint == 'admin.users' %}active{% endif %}">
+
+                <span class="mobile-nav-icon">
+                    <i class="bi bi-people-fill"></i>
+                </span>
+
+                <span>Manage Users</span>
+
+                <i class="bi bi-chevron-right mobile-nav-arrow"></i>
+
+            </a>
+
+
+            <a href="{{ url_for('admin.donations') }}"
+               class="mobile-nav-link {% if request.endpoint == 'admin.donations' %}active{% endif %}">
+
+                <span class="mobile-nav-icon">
+                    <i class="bi bi-box2-heart-fill"></i>
+                </span>
+
+                <span>Manage Donations</span>
+
+                <i class="bi bi-chevron-right mobile-nav-arrow"></i>
+
+            </a>
+
+
+            <a href="{{ url_for('admin.bookings') }}"
+               class="mobile-nav-link {% if request.endpoint == 'admin.bookings' %}active{% endif %}">
+
+                <span class="mobile-nav-icon">
+                    <i class="bi bi-bookmark-check-fill"></i>
+                </span>
+
+                <span>Manage Bookings</span>
+
+                <i class="bi bi-chevron-right mobile-nav-arrow"></i>
+
+            </a>
+
+
+            <a href="{{ url_for('admin.kyc_requests') }}"
+               class="mobile-nav-link {% if request.endpoint == 'admin.kyc_requests' %}active{% endif %}">
+
+                <span class="mobile-nav-icon">
+                    <i class="bi bi-person-vcard-fill"></i>
+                </span>
+
+                <span>KYC Verification</span>
+
+                <i class="bi bi-chevron-right mobile-nav-arrow"></i>
+
+            </a>
+
+        </nav>
+
+    </div>
+
+
+    <div class="mobile-sidebar-footer">
+
+        <a href="{{ url_for('auth.logout') }}"
+           class="mobile-logout-btn"
+           onclick="localStorage.removeItem('userLocation');">
+
+            <i class="bi bi-box-arrow-right"></i>
+
+            <span>Logout</span>
+
+        </a>
 
     </div>
 

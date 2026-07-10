@@ -1,242 +1,479 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    const locationElements = document.querySelectorAll(".currentLocation");
+    const locationElements =
+        document.querySelectorAll(".currentLocation");
 
-    if (locationElements.length === 0) return;
+    const currentLocationBtn =
+        document.getElementById("useCurrentLocation");
 
-    // ==========================================
-    // Check if location is already saved
-    // ==========================================
 
-    const savedLocation = localStorage.getItem("userLocation");
+    // =====================================================
+    // Update all navbar location elements
+    // =====================================================
 
-    if (savedLocation) {
+    function updateNavbarLocation(locationName) {
 
-        try {
+        locationElements.forEach(element => {
 
-            const location = JSON.parse(savedLocation);
+            element.innerHTML =
+                `<i class="bi bi-geo-alt-fill"></i> ${locationName}`;
 
-            locationElements.forEach(el => {
+        });
 
-                el.innerHTML =
-                    `<i class="bi bi-geo-alt-fill"></i> ${location.name}`;
+    }
+
+
+    // =====================================================
+    // Show status in navbar
+    // =====================================================
+
+    function showLocationStatus(message) {
+
+        locationElements.forEach(element => {
+
+            element.innerText = message;
+
+        });
+
+    }
+
+
+    // =====================================================
+    // Close location modal
+    // =====================================================
+
+    function closeLocationModal() {
+
+        const modalElement =
+            document.getElementById("locationModal");
+
+        if (!modalElement) return;
+
+        const modal =
+            bootstrap.Modal.getInstance(modalElement);
+
+        if (modal) {
+
+            modal.hide();
+
+        }
+
+    }
+
+
+    // =====================================================
+    // Save location to Flask session
+    // =====================================================
+
+    function saveLocationToSession(
+        locationName,
+        latitude,
+        longitude
+    ) {
+
+        return fetch("/set-current-location", {
+
+            method: "POST",
+
+            headers: {
+
+                "Content-Type": "application/json"
+
+            },
+
+            body: JSON.stringify({
+
+                location: locationName,
+
+                latitude: latitude,
+
+                longitude: longitude
+
+            })
+
+        })
+
+        .then(response => {
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Unable to save location in session."
+                );
+
+            }
+
+            return response.json();
+
+        });
+
+    }
+
+
+    // =====================================================
+    // Reverse geocode GPS coordinates
+    // =====================================================
+
+    function processCoordinates(latitude, longitude, shouldReload = false) {
+
+        console.log("Latitude:", latitude);
+        console.log("Longitude:", longitude);
+
+        return fetch("/get-location", {
+
+            method: "POST",
+
+            headers: {
+
+                "Content-Type": "application/json"
+
+            },
+
+            body: JSON.stringify({
+
+                latitude: latitude,
+
+                longitude: longitude
+
+            })
+
+        })
+
+        .then(response => {
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Unable to get location name."
+                );
+
+            }
+
+            return response.json();
+
+        })
+
+        .then(data => {
+
+            if (!data.success) {
+
+                throw new Error(
+                    "Location could not be identified."
+                );
+
+            }
+
+            const locationName = data.location;
+
+            // Update navbar immediately
+            updateNavbarLocation(locationName);
+
+
+            // Save in localStorage
+            const userLocation = {
+
+                name: locationName,
+
+                lat: latitude,
+
+                lng: longitude
+
+            };
+
+            localStorage.setItem(
+
+                "userLocation",
+
+                JSON.stringify(userLocation)
+
+            );
+
+
+            // Save to Flask session
+            return saveLocationToSession(
+
+                locationName,
+
+                latitude,
+
+                longitude
+
+            )
+
+            .then(sessionData => {
+
+                console.log(
+                    "Current location saved in session:",
+                    sessionData
+                );
+
+                closeLocationModal();
+
+
+                /*
+                 * When user explicitly clicks
+                 * "Use Current Location",
+                 * reload so nearby food is recalculated.
+                 */
+
+                if (shouldReload) {
+
+                    window.location.reload();
+
+                }
 
             });
 
-            console.log("Using saved location:", location.name);
+        });
+
+    }
+
+
+    // =====================================================
+    // Get GPS location
+    // =====================================================
+
+    function getCurrentGPSLocation(shouldReload = false) {
+
+        if (!navigator.geolocation) {
+
+            showLocationStatus(
+                "Location not supported"
+            );
 
             return;
 
         }
 
-        catch (e) {
 
-            localStorage.removeItem("userLocation");
+        showLocationStatus(
+            "Getting location..."
+        );
+
+
+        // Disable button while detecting
+        if (currentLocationBtn) {
+
+            currentLocationBtn.disabled = true;
+
+            currentLocationBtn.innerHTML = `
+
+                <span
+                    class="spinner-border spinner-border-sm me-2"
+                    role="status">
+                </span>
+
+                Detecting Location...
+
+            `;
 
         }
 
-    }
 
-    // ==========================================
-    // Browser Support
-    // ==========================================
+        navigator.geolocation.getCurrentPosition(
 
-    if (!navigator.geolocation) {
+            function(position) {
 
-        locationElements.forEach(el => {
+                const latitude =
+                    position.coords.latitude;
 
-            el.innerText = "Location not supported";
+                const longitude =
+                    position.coords.longitude;
 
-        });
 
-        return;
+                processCoordinates(
 
-    }
+                    latitude,
 
-    locationElements.forEach(el => {
+                    longitude,
 
-        el.innerText = "Getting location...";
+                    shouldReload
 
-    });
+                )
 
-    // ==========================================
-    // Get Current GPS Location
-    // ==========================================
+                .catch(error => {
 
-    navigator.geolocation.getCurrentPosition(
+                    console.error(error);
 
-        function(position) {
-
-            const latitude = position.coords.latitude;
-            const longitude = position.coords.longitude;
-
-            console.log("Latitude :", latitude);
-            console.log("Longitude:", longitude);
-
-            fetch("/get-location", {
-
-                method: "POST",
-
-                headers: {
-
-                    "Content-Type": "application/json"
-
-                },
-
-                body: JSON.stringify({
-
-                    latitude: latitude,
-
-                    longitude: longitude
-
-                })
-
-            })
-
-            .then(response => response.json())
-
-            .then(data => {
-
-                console.log(data);
-
-                if (data.success) {
-
-                    locationElements.forEach(el => {
-
-                        el.innerHTML =
-                            `<i class="bi bi-geo-alt-fill"></i> ${data.location}`;
-
-                    });
-
-                    // ==========================================
-                    // Save Location
-                    // ==========================================
-
-                    localStorage.setItem(
-
-                        "userLocation",
-
-                        JSON.stringify({
-
-                            name: data.location,
-
-                            lat: latitude,
-
-                            lng: longitude
-
-                        })
-
+                    showLocationStatus(
+                        "Unable to fetch location"
                     );
 
-                    // ==========================================
-                    // Save Current Location to Flask Session
-                    // ==========================================
-
-                    fetch("/set-current-location", {
-
-                        method: "POST",
-
-                        headers: {
-
-                            "Content-Type": "application/json"
-
-                        },
-
-                        body: JSON.stringify({
-
-                            location: data.location,
-
-                            latitude: latitude,
-
-                            longitude: longitude
-
-                        })
-
-                    })
-
-                    .then(res => res.json())
-
-                    .then(() => {
-
-                        console.log("Current location saved in session.");
-
-                    })
-
-                    .catch(err => {
-
-                        console.error(err);
-
-                    });
-
-                }
-
-                else {
-
-                    locationElements.forEach(el => {
-
-                        el.innerText = "Unknown Location";
-
-                    });
-
-                }
-
-            })
-
-            .catch(error => {
-
-                console.error(error);
-
-                locationElements.forEach(el => {
-
-                    el.innerText = "Unable to fetch location";
+                    resetCurrentLocationButton();
 
                 });
 
-            });
+            },
 
-        },
 
-        function(error) {
+            function(error) {
 
-            let message = "Unable to fetch location";
+                console.error(
+                    "Geolocation error:",
+                    error
+                );
 
-            switch(error.code){
+                let message =
+                    "Unable to fetch location";
 
-                case error.PERMISSION_DENIED:
 
-                    message = "Permission Denied";
-                    break;
+                switch (error.code) {
 
-                case error.POSITION_UNAVAILABLE:
+                    case error.PERMISSION_DENIED:
 
-                    message = "Location Unavailable";
-                    break;
+                        message =
+                            "Location permission denied";
 
-                case error.TIMEOUT:
+                        break;
 
-                    message = "Request Timed Out";
-                    break;
+
+                    case error.POSITION_UNAVAILABLE:
+
+                        message =
+                            "Location unavailable";
+
+                        break;
+
+
+                    case error.TIMEOUT:
+
+                        message =
+                            "Location request timed out";
+
+                        break;
+
+                }
+
+
+                showLocationStatus(message);
+
+                resetCurrentLocationButton();
+
+            },
+
+
+            {
+
+                enableHighAccuracy: true,
+
+                timeout: 15000,
+
+                maximumAge: 0
 
             }
 
-            locationElements.forEach(el => {
+        );
 
-                el.innerText = message;
+    }
 
-            });
 
-        },
+    // =====================================================
+    // Reset current-location button
+    // =====================================================
 
-        {
+    function resetCurrentLocationButton() {
 
-            enableHighAccuracy: true,
+        if (!currentLocationBtn) return;
 
-            timeout: 10000,
+        currentLocationBtn.disabled = false;
 
-            maximumAge: 0
+        currentLocationBtn.innerHTML = `
+
+            <i class="bi bi-crosshair"></i>
+
+            Use Current Location
+
+        `;
+
+    }
+
+
+    // =====================================================
+    // Use Current Location button click
+    // =====================================================
+
+    if (currentLocationBtn) {
+
+        currentLocationBtn.addEventListener(
+
+            "click",
+
+            function(event) {
+
+                event.preventDefault();
+
+                /*
+                 * true = reload after successful GPS detection,
+                 * allowing nearby food results to refresh.
+                 */
+
+                getCurrentGPSLocation(true);
+
+            }
+
+        );
+
+    }
+
+
+    // =====================================================
+    // On page load: use saved location if available
+    // =====================================================
+
+    const savedLocation =
+        localStorage.getItem("userLocation");
+
+
+    if (savedLocation) {
+
+        try {
+
+            const location =
+                JSON.parse(savedLocation);
+
+
+            if (
+                location.name &&
+                location.lat !== undefined &&
+                location.lng !== undefined
+            ) {
+
+                updateNavbarLocation(
+                    location.name
+                );
+
+                console.log(
+                    "Using saved location:",
+                    location.name
+                );
+
+                return;
+
+            }
 
         }
 
-    );
+        catch (error) {
+
+            console.error(
+                "Invalid saved location:",
+                error
+            );
+
+        }
+
+
+        localStorage.removeItem(
+            "userLocation"
+        );
+
+    }
+
+
+    // =====================================================
+    // No saved location: automatically detect GPS
+    // =====================================================
+
+    getCurrentGPSLocation(false);
 
 });
