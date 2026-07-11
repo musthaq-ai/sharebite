@@ -1,0 +1,118 @@
+{% extends "kyc_base.html" %}
+
+{% block title %}
+KYC Verification Pending
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card shadow-lg border-0 rounded-4">
+
+                <div class="card-body text-center p-5">
+
+                    <i class="bi bi-hourglass-split text-warning display-1"></i>
+
+                    <h2 class="fw-bold mt-4">
+
+                        KYC Verification Pending
+
+                    </h2>
+
+                    <p class="text-muted mt-3">
+
+                        Hello <strong>{{ user.organization_name }}</strong>,
+
+                        <br><br>
+
+                        Your KYC documents have been successfully submitted and are currently under review by our administrator.
+
+                        <br><br>
+
+                        You will be able to access all NGO features once your verification is approved.
+
+                    </p>
+
+                    <div class="alert alert-warning rounded-3 mt-4">
+
+                        <h5 class="mb-2">
+
+                            <i class="bi bi-clock-history"></i>
+
+                            Verification Status
+
+                        </h5>
+
+                        <strong>Pending Approval</strong>
+
+                        <br>
+
+                        Please wait while the administrator reviews your submitted documents.
+
+                    </div>
+
+                    <div class="row mt-5">
+
+                        <div class="col-md-4">
+
+                            <i class="bi bi-upload text-success display-6"></i>
+
+                            <h6 class="mt-2">
+
+                                Documents Submitted
+
+                            </h6>
+
+                        </div>
+
+                        <div class="col-md-4">
+
+                            <i class="bi bi-search text-primary display-6"></i>
+
+                            <h6 class="mt-2">
+
+                                Under Verification
+
+                            </h6>
+
+                        </div>
+
+                        <div class="col-md-4">
+
+                            <i class="bi bi-check-circle text-secondary display-6"></i>
+
+                            <h6 class="mt-2">
+
+                                Awaiting Approval
+
+                            </h6>
+
+                        </div>
+
+                    </div>
+
+                    <a href="{{ url_for('auth.logout') }}"
+                       class="btn btn-outline-danger rounded-pill px-4 mt-5">
+
+                        <i class="bi bi-box-arrow-right"></i>
+
+                        Logout
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,3 +1,4 @@
+import os
 from models.user import User
 from models.donation import FoodDonation
 from models.booking import Booking
@@ -5,7 +6,7 @@ from models.user import User
 from sqlalchemy import or_
 from models import db
 from models.booking import Booking
-
+from flask import current_app
 from datetime import datetime
 from models.kyc import KYC
 
@@ -165,7 +166,13 @@ def get_all_users(search=None, role=None):
 
     )
 
+# ==========================================
+# GET USER DETAILS
+# ==========================================
 
+def get_user_details(user_id):
+
+    return User.query.get(user_id)
 # ==========================================
 # DELETE USER
 # ==========================================
@@ -232,18 +239,50 @@ def get_all_donations(search=None, status=None):
 # DELETE DONATION
 # ==========================================
 
+
 def admin_delete_donation(donation_id):
 
-    donation = FoodDonation.query.get(
-        donation_id
-    )
+    donation = FoodDonation.query.get(donation_id)
 
     if donation is None:
+
         return False
 
-    db.session.delete(
-        donation
-    )
+    # ----------------------------------
+    # Delete all bookings of this donation
+    # ----------------------------------
+
+    Booking.query.filter_by(
+
+        food_id=donation.id
+
+    ).delete()
+
+    # ----------------------------------
+    # Delete uploaded food image
+    # ----------------------------------
+
+    if donation.image:
+
+        image_path = os.path.join(
+
+            current_app.config["UPLOAD_FOLDER"],
+
+            "food",
+
+            donation.image
+
+        )
+
+        if os.path.exists(image_path):
+
+            os.remove(image_path)
+
+    # ----------------------------------
+    # Delete Donation
+    # ----------------------------------
+
+    db.session.delete(donation)
 
     db.session.commit()
 
@@ -293,6 +332,9 @@ def approve_kyc(kyc_id):
         return False
 
     kyc.status = "Approved"
+    kyc.reupload_allowed = False
+
+    kyc.admin_remark = None
     kyc.verified_at = datetime.now()
 
     user = User.query.get(kyc.user_id)
@@ -321,7 +363,8 @@ def reject_kyc(kyc_id, reason):
         return False
 
     kyc.status = "Rejected"
-    kyc.rejection_reason = reason
+    kyc.admin_remark = reason
+    kyc.reupload_allowed = True
 
     user = User.query.get(kyc.user_id)
     user.kyc_status = "Rejected"

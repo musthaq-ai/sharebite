@@ -56,7 +56,20 @@ class FoodDonation(db.Model):
     )
 
     # Relationship with User (Donor)
+    # ==========================================
+# Relationships
+# ==========================================
+
+# Donor
     donor = db.relationship(
-        "User",
-        backref="donations"
-    )
+    "User",
+    backref="donations"
+)
+
+# Delete all bookings automatically
+    bookings = db.relationship(
+    "Booking",
+    back_populates="food",
+    cascade="all, delete-orphan",
+    passive_deletes=True
+)

@@ -7,7 +7,7 @@ from flask import (
     request,
     flash
 )
-
+from models.kyc import KYC
 from models.user import User
 from controllers.kyc_controller import upload_kyc
 
@@ -71,4 +71,99 @@ def upload():
     return render_template(
         "kyc/upload.html",
         user=user
+    )
+    
+# ==========================================
+# KYC PENDING PAGE
+# ==========================================
+
+@kyc.route("/pending")
+def pending():
+
+    if "user_id" not in session:
+
+        return redirect(url_for("auth.login"))
+
+    user = User.query.get(session["user_id"])
+
+    return render_template(
+
+        "kyc/pending.html",
+
+        user=user
+
+    )
+# ==========================================
+# RE-UPLOAD KYC
+# ==========================================
+
+@kyc.route("/reupload", methods=["GET", "POST"])
+def reupload():
+
+    if "user_id" not in session:
+
+        return redirect(url_for("auth.login"))
+
+    user = User.query.get(session["user_id"])
+
+    if request.method == "POST":
+
+        document = request.files.get("document")
+
+        if document is None or document.filename == "":
+
+            flash(
+
+                "Please choose a document.",
+
+                "danger"
+
+            )
+
+            return redirect(
+
+                url_for("kyc.reupload")
+
+            )
+
+        success = upload_kyc(
+
+            user,
+
+            document
+
+        )
+
+        if success:
+
+            flash(
+
+                "Your KYC has been re-uploaded successfully. Please wait for admin verification.",
+
+                "success"
+
+            )
+
+            return redirect(
+
+                url_for("kyc.pending")
+
+            )
+
+        else:
+
+            flash(
+
+                "Unable to upload KYC.",
+
+                "danger"
+
+            )
+
+    return render_template(
+
+        "kyc/reupload.html",
+
+        user=user
+
     )

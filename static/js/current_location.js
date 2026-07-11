@@ -1,5 +1,4 @@
-console.log("current_location.js loaded");
-alert("JS Loaded");
+
 let currentMap;
 let currentMarker;
 

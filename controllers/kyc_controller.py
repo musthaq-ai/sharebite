@@ -8,7 +8,7 @@ from models.kyc import KYC
 
 
 # ==========================================
-# UPLOAD KYC
+# UPLOAD / RE-UPLOAD KYC
 # ==========================================
 
 def upload_kyc(user, file):
@@ -17,9 +17,9 @@ def upload_kyc(user, file):
         user_id=user.id
     ).first()
 
-    # -----------------------------
-    # First Upload
-    # -----------------------------
+    # ==========================================
+    # FIRST UPLOAD
+    # ==========================================
 
     if existing is None:
 
@@ -40,7 +40,9 @@ def upload_kyc(user, file):
 
             status="Pending",
 
-            reupload_allowed=False
+            reupload_allowed=False,
+
+            admin_remark=None
 
         )
 
@@ -52,26 +54,34 @@ def upload_kyc(user, file):
 
         return True
 
-    # -----------------------------
-    # Already Uploaded
-    # -----------------------------
+    # ==========================================
+    # RE-UPLOAD NOT ALLOWED
+    # ==========================================
 
-    if existing.reupload_allowed == "No":
+    if not existing.reupload_allowed:
 
         return False
 
-    # -----------------------------
-    # Re-upload Allowed
-    # -----------------------------
+    # ==========================================
+    # RE-UPLOAD ALLOWED
+    # ==========================================
 
+    # Delete old document
     delete_uploaded_file(
+
         existing.document_path.replace("kyc/", ""),
+
         "kyc"
+
     )
 
+    # Save new document
     filename = save_uploaded_file(
+
         file,
+
         "kyc"
+
     )
 
     existing.document_name = file.filename
@@ -80,9 +90,11 @@ def upload_kyc(user, file):
 
     existing.status = "Pending"
 
-    existing.reupload_allowed = "No"
+    existing.reupload_allowed = False
 
-    existing.rejection_reason = None
+    existing.admin_remark = None
+
+    existing.verified_at = None
 
     user.kyc_status = "Pending"
 

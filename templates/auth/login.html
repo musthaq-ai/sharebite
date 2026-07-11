@@ -8,32 +8,72 @@ Login
 
 <div class="login-card">
 
-    <a href="{{ url_for('home.index') }}" class="brand">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+    <!-- Logo -->
+
+    <a href="{{ url_for('home.index') }}"
+       class="brand text-decoration-none"
+       title="Go to Home">
 
         <span class="brand-share">
+            Share
+        </span>
 
-        Share
+        <span class="brand-bite">
+            Bite
+        </span>
 
-    </span>
+    </a>
 
-    <span class="brand-bite">
+    <!-- Home Button -->
 
-        Bite
+    <a href="{{ url_for('home.index') }}"
+       class="btn btn-outline-success rounded-pill px-3">
 
-    </span>
+        <i class="bi bi-house-door-fill"></i>
 
-</a>
+        Home
+
+    </a>
+
+</div>
+
     <h2 class="mt-4">
-
         Welcome Back 👋
-
     </h2>
 
     <p>
-
-        Sign in to continue helping communities through Food Bridge.
-
+        Sign in to continue helping communities through ShareBite.
     </p>
+
+    <!-- ==========================================
+         FLASH MESSAGES
+    =========================================== -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            {% for category, message in messages %}
+
+                <div class="alert alert-{{ category }} alert-dismissible fade show mt-3">
+
+                    {{ message }}
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert">
+                    </button>
+
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
 
     <form method="POST">
 

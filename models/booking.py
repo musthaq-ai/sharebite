@@ -65,10 +65,9 @@ class Booking(db.Model):
 )
     # Relationships
     food = db.relationship(
-        "FoodDonation",
-        backref="bookings"
-    )
-
+    "FoodDonation",
+    back_populates="bookings"
+)
     ngo = db.relationship(
         "User",
         backref="ngo_bookings"

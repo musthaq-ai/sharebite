@@ -16,7 +16,8 @@ from controllers.admin_controller import (
     get_all_bookings,
     get_kyc_requests,
     approve_kyc,
-    reject_kyc
+    reject_kyc,
+    get_user_details
 )
 admin = Blueprint(
     "admin",
@@ -72,7 +73,28 @@ def users():
         "admin/users.html",
         users=users
     )
+# ==========================================
+# VIEW USER DETAILS
+# ==========================================
 
+@admin.route("/user/<int:user_id>")
+def user_details(user_id):
+
+    if "user_id" not in session:
+        return redirect(url_for("auth.login"))
+
+    if session.get("role") != "Admin":
+        return redirect(url_for("auth.login"))
+
+    user = get_user_details(user_id)
+
+    if user is None:
+        return redirect(url_for("admin.users"))
+
+    return render_template(
+        "admin/user_details.html",
+        user=user
+    )
 
 # ==========================================
 # DELETE USER

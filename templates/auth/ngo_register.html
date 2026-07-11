@@ -29,7 +29,8 @@ NGO Registration
 <form
     id="ngoRegisterForm"
     action="{{ url_for('auth.ngo_register') }}"
-    method="POST">
+    method="POST"
+    enctype="multipart/form-data">
 
     <!-- Progress -->
 
@@ -419,6 +420,54 @@ NGO Registration
         </div>
 
         <div class="form-check mt-4">
+            <hr class="my-4">
+
+<h5 class="section-title">
+
+    <i class="bi bi-file-earmark-check-fill"></i>
+
+    NGO Verification (KYC)
+
+</h5>
+
+<p class="text-muted mb-3">
+
+    Upload your NGO registration certificate or any valid government-issued document.
+    Your account will be activated only after admin verification.
+
+</p>
+
+<div class="mb-4">
+
+    <label class="form-label fw-semibold">
+
+        Upload KYC Document
+
+        <span class="text-danger">*</span>
+
+    </label>
+
+    <input
+        type="file"
+        class="form-control"
+        name="kyc_document"
+        id="kyc_document"
+        accept=".pdf,.jpg,.jpeg,.png"
+        required>
+
+    <div class="form-text">
+
+        Accepted formats:
+        PDF,
+        JPG,
+        JPEG,
+        PNG
+
+        (Maximum 5 MB)
+
+    </div>
+
+</div>
 
             <input
                 class="form-check-input"
@@ -451,7 +500,7 @@ NGO Registration
 
                 <i class="bi bi-building-add"></i>
 
-                Create NGO Account
+                Register & Submit for Verification
 
             </button>
 

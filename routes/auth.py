@@ -1,3 +1,4 @@
+from controllers.kyc_controller import upload_kyc
 from flask import Blueprint, render_template, request, redirect, session, url_for
 import bcrypt
 
@@ -27,7 +28,15 @@ def donor_register():
         ).first()
 
         if existing_email:
-            return "Email already registered!"
+
+            flash(
+        "Email already registered.",
+        "danger"
+    )
+
+            return redirect(
+        url_for("auth.donor_register")
+    )
 
         # Check if phone already exists
         existing_phone = User.query.filter_by(
@@ -35,7 +44,15 @@ def donor_register():
         ).first()
 
         if existing_phone:
-            return "Phone number already registered!"
+
+            flash(
+        "Phone number already registered.",
+        "danger"
+            )
+
+            return redirect(
+        url_for("auth.donor_register")
+    )
 
         # Hash password
         password = request.form["password"]
@@ -89,7 +106,13 @@ def ngo_register():
         ).first()
 
         if existing_email:
-            return "Email already registered!"
+
+            flash(
+                "Email already registered.",
+                "danger"
+            )
+
+            return redirect(url_for("auth.ngo_register"))
 
         # Check phone
         existing_phone = User.query.filter_by(
@@ -97,7 +120,13 @@ def ngo_register():
         ).first()
 
         if existing_phone:
-            return "Phone number already registered!"
+
+            flash(
+                "Phone number already registered.",
+                "danger"
+            )
+
+            return redirect(url_for("auth.ngo_register"))
 
         # Hash Password
         password = request.form["password"]
@@ -107,6 +136,7 @@ def ngo_register():
             bcrypt.gensalt()
         ).decode("utf-8")
 
+        # Create NGO User
         ngo = User(
 
             name=request.form["name"],
@@ -131,13 +161,35 @@ def ngo_register():
 
             longitude=0,
 
-            role="NGO"
+            role="NGO",
+
+            kyc_status="Pending"
 
         )
 
         db.session.add(ngo)
-
         db.session.commit()
+
+        # ======================================
+        # Upload KYC Immediately
+        # ======================================
+
+        document = request.files.get("kyc_document")
+
+        if document and document.filename != "":
+
+            upload_kyc(
+                ngo,
+                document
+            )
+
+        flash(
+
+            "Registration successful! Your KYC has been submitted for verification. Please wait for admin approval before logging in.",
+
+            "success"
+
+        )
 
         return redirect(url_for("auth.login"))
 
@@ -153,45 +205,101 @@ def login():
         email = request.form["email"]
         password = request.form["password"]
 
-        # Find user by email
-        user = User.query.filter_by(email=email).first()
+        # ======================================
+        # Find User
+        # ======================================
+
+        user = User.query.filter_by(
+            email=email
+        ).first()
 
         if user is None:
 
             flash(
-        "Email not found.",
-        "danger" )
+                "Email not found.",
+                "danger"
+            )
 
             return redirect(
                 url_for("auth.login")
+            )
+
+        # ======================================
+        # Verify Password
+        # ======================================
+
+        if not bcrypt.checkpw(
+
+            password.encode("utf-8"),
+
+            user.password.encode("utf-8")
+
+        ):
+
+            flash(
+                "Incorrect password.",
+                "danger"
+            )
+
+            return redirect(
+                url_for("auth.login")
+            )
+
+        # ======================================
+        # Login Successful
+        # ======================================
+
+        session["user_id"] = user.id
+        session["user_name"] = user.name
+        session["role"] = user.role
+
+        # ======================================
+        # NGO KYC Verification
+        # ======================================
+
+        if user.role == "NGO":
+
+            if user.kyc_status == "Pending":
+
+                return redirect(
+                    url_for("kyc.pending")
+                )
+
+            elif user.kyc_status == "Rejected":
+
+                return redirect(
+                    url_for("kyc.reupload")
+                )
+
+            elif user.kyc_status == "Approved":
+
+                return redirect(
+                    url_for("ngo.dashboard")
+                )
+
+        # ======================================
+        # Donor Dashboard
+        # ======================================
+
+        elif user.role == "Donor":
+
+            return redirect(
+                url_for("donor.dashboard")
+            )
+
+        # ======================================
+        # Admin Dashboard
+        # ======================================
+
+        elif user.role == "Admin":
+
+            return redirect(
+                url_for("admin.dashboard")
+            )
+
+    return render_template(
+        "auth/login.html"
     )
-
-        # Compare hashed password
-        if bcrypt.checkpw(password.encode("utf-8"),user.password.encode("utf-8")):
-
-            session["user_id"] = user.id
-            session["user_name"] = user.name
-            session["role"] = user.role
-
-            if user.role == "Donor":
-                return redirect(url_for("donor.dashboard"))
-
-            elif user.role == "NGO":
-                return redirect(url_for("ngo.dashboard"))
-
-            elif user.role == "Admin":
-                return redirect(url_for("admin.dashboard"))
-
-        flash(
-    "Incorrect password.",
-    "danger"
-)
-
-        return redirect(
-    url_for("auth.login")
-)
-
-    return render_template("auth/login.html")
 
 #logout
 
