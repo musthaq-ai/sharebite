@@ -2,6 +2,13 @@ from controllers.kyc_controller import upload_kyc
 from flask import Blueprint, render_template, request, redirect, session, url_for
 import bcrypt
 
+from controllers.auth_controller import (
+    create_temp_registration,
+    verify_registration_otp,
+    resend_registration_otp
+)
+from models.temp_registration import TempRegistration
+
 from flask import flash
 
 from models import db
@@ -78,20 +85,136 @@ def donor_register():
             role="Donor"
         )
 
-        db.session.add(user)
-        db.session.commit()
+        registration_data = {
+
+    "name": request.form["name"],
+
+    "organization_name": request.form["hotel_name"],
+
+    "email": request.form["email"],
+
+    "phone": request.form["phone"],
+
+    "password": hashed_password,
+
+    "address1": request.form["address1"],
+
+    "address2": request.form["address2"],
+
+    "district": request.form["district"],
+
+    "state": request.form["state"],
+
+    "role": "Donor"
+
+}
+
+        print("Calling create_temp_registration...")
+
+        temp = create_temp_registration(registration_data)
+
+        print("Returned from create_temp_registration")
+
+        print(temp)
+
+
+        session["temp_registration_id"] = temp.id
 
         flash(
-    "Registration successful. Please login.",
+
+    "A verification OTP has been sent to your email.",
+
     "success"
+
 )
 
         return redirect(
-    url_for("auth.login")
+
+    url_for("auth.verify_otp")
+
 )
 
     return render_template("auth/donor_register.html")
 
+# -----------------------------
+# VERIFY OTP
+# -----------------------------
+@auth.route("/verify-otp", methods=["GET", "POST"])
+def verify_otp():
+
+    temp_id = session.get("temp_registration_id")
+
+    if not temp_id:
+
+        flash(
+            "Registration session expired.",
+            "danger"
+        )
+
+        return redirect(
+            url_for("auth.donor_register")
+        )
+
+    if request.method == "POST":
+
+        otp = request.form["otp"]
+
+        success, message = verify_registration_otp(
+            temp_id,
+            otp
+        )
+
+        if success:
+
+            session.pop("temp_registration_id", None)
+
+            flash(
+                message,
+                "success"
+            )
+
+            return redirect(
+                url_for("auth.login")
+            )
+
+        flash(
+            message,
+            "danger"
+        )
+
+    return render_template(
+        "auth/verify_otp.html"
+    )
+    
+# -----------------------------
+# RESEND OTP
+# -----------------------------
+@auth.route("/resend-otp")
+def resend_otp():
+
+    temp_id = session.get("temp_registration_id")
+
+    if not temp_id:
+
+        flash(
+            "Session expired.",
+            "danger"
+        )
+
+        return redirect(
+            url_for("auth.donor_register")
+        )
+
+    resend_registration_otp(temp_id)
+
+    flash(
+        "A new OTP has been sent to your email.",
+        "success"
+    )
+
+    return redirect(
+        url_for("auth.verify_otp")
+    )
 # -----------------------------
 # NGO REGISTRATION
 # -----------------------------

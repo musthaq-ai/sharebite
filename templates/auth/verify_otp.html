@@ -1,0 +1,282 @@
+{% extends "auth/auth_layout.html" %}
+
+{% block title %}
+Verify Email
+{% endblock %}
+
+{% block form %}
+
+<div class="login-card">
+
+    <a href="{{ url_for('home.index') }}" class="brand">
+
+        <span class="brand-share">Share</span>
+
+        <span class="brand-bite">Bite</span>
+
+    </a>
+
+    <div class="text-center mt-4">
+
+        <i class="bi bi-envelope-check-fill text-success"
+           style="font-size:70px;"></i>
+
+    </div>
+
+    <h2 class="mt-3 text-center">
+
+        Verify Your Email
+
+    </h2>
+
+    <p class="text-center text-muted">
+
+        We've sent a <strong>6-digit OTP</strong> to your email address.
+
+        <br>
+
+        Enter it below to complete your registration.
+
+    </p>
+
+    <!-- Flash Messages -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            {% for category, message in messages %}
+
+                <div class="alert alert-{{ category }}">
+
+                    {{ message }}
+
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+    <form method="POST" id="otpForm">
+
+    <input
+        type="hidden"
+        name="otp"
+        id="otp">
+
+    <div class="mb-4">
+
+        <label class="form-label">
+
+            Enter Verification Code
+
+        </label>
+
+        <div class="d-flex justify-content-center gap-2">
+
+            <input class="otp-box form-control" maxlength="1">
+
+            <input class="otp-box form-control" maxlength="1">
+
+            <input class="otp-box form-control" maxlength="1">
+
+            <input class="otp-box form-control" maxlength="1">
+
+            <input class="otp-box form-control" maxlength="1">
+
+            <input class="otp-box form-control" maxlength="1">
+
+        </div>
+
+    </div>
+
+    <button class="btn login-btn w-100">
+
+        <i class="bi bi-shield-check"></i>
+
+        Verify OTP
+
+    </button>
+
+</form>
+
+    <div class="text-center mt-4">
+
+        <p class="text-muted mb-2">
+
+            Didn't receive the OTP?
+
+        </p>
+
+        <span id="countdown"
+
+              class="text-secondary">
+
+            Resend available in 60s
+
+        </span>
+
+        <br><br>
+
+        <a
+
+            href="{{ url_for('auth.resend_otp') }}"
+
+            id="resendBtn"
+
+            class="btn btn-outline-success disabled">
+
+            <i class="bi bi-arrow-clockwise"></i>
+
+            Resend OTP
+
+        </a>
+
+    </div>
+
+</div>
+
+<script>
+
+let seconds = 60;
+
+const countdown = document.getElementById("countdown");
+
+const resendBtn = document.getElementById("resendBtn");
+
+const timer = setInterval(function(){
+
+    seconds--;
+
+    countdown.innerHTML = "Resend available in " + seconds + "s";
+
+    if(seconds <= 0){
+
+        clearInterval(timer);
+
+        countdown.innerHTML = "";
+
+        resendBtn.classList.remove("disabled");
+
+    }
+
+},1000);
+
+</script>
+<script>
+
+const inputs = document.querySelectorAll(".otp-box");
+
+const hidden = document.getElementById("otp");
+
+const form = document.getElementById("otpForm");
+
+// ==========================================
+// Auto Move & Number Only
+// ==========================================
+
+inputs.forEach((input, index) => {
+
+    input.addEventListener("input", function () {
+
+        this.value = this.value.replace(/[^0-9]/g, "");
+
+        if (this.value && index < inputs.length - 1) {
+
+            inputs[index + 1].focus();
+
+        }
+
+        hidden.value = [...inputs].map(i => i.value).join("");
+
+    });
+
+    input.addEventListener("keydown", function (e) {
+
+        if (e.key === "Backspace") {
+
+            if (this.value === "" && index > 0) {
+
+                inputs[index - 1].focus();
+
+            }
+
+        }
+
+    });
+
+});
+
+// ==========================================
+// Paste Support
+// ==========================================
+
+inputs[0].addEventListener("paste", function (e) {
+
+    e.preventDefault();
+
+    const pastedData = e.clipboardData
+        .getData("text")
+        .replace(/\D/g, "");
+
+    if (pastedData.length === 6) {
+
+        pastedData.split("").forEach((digit, i) => {
+
+            inputs[i].value = digit;
+
+        });
+
+        hidden.value = pastedData;
+
+        inputs[5].focus();
+
+    }
+
+});
+
+// ==========================================
+// Submit Validation
+// ==========================================
+
+form.addEventListener("submit", function (e) {
+
+    hidden.value = [...inputs].map(i => i.value).join("");
+
+    if (hidden.value.length !== 6) {
+
+        e.preventDefault();
+
+        Swal.fire({
+
+    icon: "warning",
+
+    title: "Incomplete OTP",
+
+    text: "Please enter the complete 6-digit OTP.",
+
+    confirmButtonColor: "#198754"
+
+});
+
+        return;
+
+    }
+
+});
+
+// ==========================================
+// Focus First Box
+// ==========================================
+
+window.onload = function () {
+
+    inputs[0].focus();
+
+};
+
+</script>
+
+{% endblock %}

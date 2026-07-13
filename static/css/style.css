@@ -1621,3 +1621,44 @@ main{
     }
 
 }
+.otp-box{
+
+    width:55px;
+
+    height:60px;
+
+    text-align:center;
+
+    font-size:24px;
+
+    font-weight:bold;
+
+    border-radius:12px;
+
+    border:2px solid #ced4da;
+
+    transition:.2s;
+
+}
+
+.otp-box:focus{
+
+    border-color:#198754;
+
+    box-shadow:0 0 0 .2rem rgba(25,135,84,.15);
+
+}
+
+@media(max-width:576px){
+
+    .otp-box{
+
+        width:45px;
+
+        height:55px;
+
+        font-size:22px;
+
+    }
+
+}

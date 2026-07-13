@@ -5,7 +5,7 @@ from routes.ngo import ngo
 from flask import session
 from routes.location import location
 
-
+from models.temp_registration import TempRegistration
 from routes.admin import admin
 from controllers.notification_controller import get_unread_count
 # Import Models
